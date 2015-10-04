@@ -1,6 +1,9 @@
 package com.example.admin.route;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,6 +32,12 @@ public class CameraActivity extends Activity {
     ImageView viewImage;
     Button b;
 
+   // private NotesDbAdapter nDbHelper;
+
+    FragmentManager fragmentManager = getFragmentManager();
+    FragmentTransaction fragmentTransaction ;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +51,20 @@ public class CameraActivity extends Activity {
                 selectImage();
             }
         });
+
+        Fragment fragment1 = new NotesFragment();
+        Fragment fragment2 = new TimerFragment();
+
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.frameLayout1, fragment1);
+        fragmentTransaction.commit();
+
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.frameLayout2, fragment2);
+        fragmentTransaction.commit();
+
+       // nDbHelper = new NotesDbAdapter(this);
+      //  nDbHelper.open();
     }
 
     @Override
