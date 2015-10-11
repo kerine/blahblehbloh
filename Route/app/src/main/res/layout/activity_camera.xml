@@ -27,10 +27,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/camera" />
-
     </LinearLayout>
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/notePad"
+        android:layout_gravity="center_horizontal|top"
+        />
 
+    <!--
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,5 +50,15 @@
         android:id="@+id/frameLayout2"
         >
     </FrameLayout>
+    -->
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:id="@+id/button4"
+        android:layout_gravity="center_horizontal"
+        android:onClick="goToMap"
+        />
 
 </LinearLayout>

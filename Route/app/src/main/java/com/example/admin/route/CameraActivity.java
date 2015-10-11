@@ -1,7 +1,6 @@
 package com.example.admin.route;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -15,10 +14,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -28,23 +27,23 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class CameraActivity extends Activity {
-
     ImageView viewImage;
     Button b;
-
-   // private NotesDbAdapter nDbHelper;
+    String id;
+    String path;
+    //String picturePath;
 
     FragmentManager fragmentManager = getFragmentManager();
-    FragmentTransaction fragmentTransaction ;
+    FragmentTransaction fragmentTransaction;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_camera);
 
-        b=(Button)findViewById(R.id.btnSelectPhoto);
-        viewImage=(ImageView)findViewById(R.id.viewImage);
+        b = (Button) findViewById(R.id.btnSelectPhoto);
+        viewImage = (ImageView) findViewById(R.id.viewImage);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +51,7 @@ public class CameraActivity extends Activity {
             }
         });
 
+        /*
         Fragment fragment1 = new NotesFragment();
         Fragment fragment2 = new TimerFragment();
 
@@ -62,9 +62,10 @@ public class CameraActivity extends Activity {
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.frameLayout2, fragment2);
         fragmentTransaction.commit();
+        */
 
-       // nDbHelper = new NotesDbAdapter(this);
-      //  nDbHelper.open();
+        // nDbHelper = new NotesDbAdapter(this);
+        //  nDbHelper.open();
     }
 
     @Override
@@ -91,26 +92,22 @@ public class CameraActivity extends Activity {
 
     private void selectImage() {
 
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(CameraActivity.this);
         builder.setTitle("Add Photo!");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo"))
-                {
+                if (options[item].equals("Take Photo")) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                     startActivityForResult(intent, 1);
-                }
-                else if (options[item].equals("Choose from Gallery"))
-                {
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 2);
-                }
-                else if (options[item].equals("Cancel")) {
+                } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
             }
@@ -138,10 +135,13 @@ public class CameraActivity extends Activity {
 
                     viewImage.setImageBitmap(bitmap);
 
-                    String path = Environment.getExternalStorageDirectory().getAbsolutePath();;
+
+                    path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    ;
                     f.delete();
                     OutputStream outFile = null;
                     File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
+                    path = path + String.valueOf(System.currentTimeMillis()) + ".jpg";
                     try {
                         outFile = new FileOutputStream(file);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
@@ -160,16 +160,37 @@ public class CameraActivity extends Activity {
             } else if (requestCode == 2) {
 
                 Uri selectedImage = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getContentResolver().query(selectedImage,filePath, null, null, null);
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
                 c.moveToFirst();
                 int columnIndex = c.getColumnIndex(filePath[0]);
-                String picturePath = c.getString(columnIndex);
+                path = c.getString(columnIndex);
                 c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                Log.w("path of image", picturePath + "");
+                Bitmap thumbnail = (BitmapFactory.decodeFile(path));
+                Log.w("path of image", path + "");
                 viewImage.setImageBitmap(thumbnail);
             }
         }
     }
+
+
+    public void goToMap(View view) {
+
+        EditText text = (EditText) findViewById(R.id.notePad);
+        String notes = text.getText().toString();
+
+        Intent intent = new Intent(this, MapActivity.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("notes", notes);
+        bundle.putString("path", path);
+        intent.putExtras(bundle);
+
+        int requestCode = 1;
+        startActivityForResult(intent, requestCode);
+
+        startActivity(intent);
+
+    }
+
 }

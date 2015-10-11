@@ -1,6 +1,7 @@
 package com.example.admin.route;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,7 +19,9 @@ import android.widget.TextView;
  */
 public class TimerFragment extends Fragment {
 
-    Button butnstart, butnreset, butnpause;
+    private OnFragmentInteractionListener mListener;
+
+    Button butnstart, butnreset;
     TextView time;
     long starttime = 0L;
     long timeInMilliseconds = 0L;
@@ -33,7 +36,6 @@ public class TimerFragment extends Fragment {
     public TimerFragment() {
         // Required empty public constructor
     }
-
 
     //reference
     //http://www.androidplus.org/2015/03/android-stopwatch-timer-app-tutorial-15.html
@@ -102,5 +104,76 @@ public class TimerFragment extends Fragment {
             handler.postDelayed(this, 0);
         }
     };
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        public void onFragmentInteraction(String id);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mListener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    public void passData(String time) {
+            mListener.onFragmentInteraction(time.toString());
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        // handle fragment arguments
+        Bundle arguments = getArguments();
+        if(arguments != null)
+        {
+            handleArguments(arguments);
+        }
+
+        // restore saved state
+        if(savedInstanceState != null)
+        {
+            handleSavedInstanceState(savedInstanceState);
+        }
+
+        // handle intent extras
+        Bundle extras = getActivity().getIntent().getExtras();
+        if(extras != null)
+        {
+            handleExtras(extras);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        // save current instance state
+        super.onSaveInstanceState(outState);
+
+        // TODO
+    }
+
+    private void handleArguments(Bundle arguments)
+    {
+        // TODO
+    }
+
+    private void handleSavedInstanceState(Bundle savedInstanceState)
+    {
+        // TODO
+    }
+
+    private void handleExtras(Bundle extras)
+    {
+        // TODO
+    }
 
 }
