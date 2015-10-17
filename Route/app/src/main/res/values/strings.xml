@@ -17,5 +17,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_directions_jsonparser">DirectionsJSONParser</string>
+
+    <string name="str_btn_draw">Draw Route</string>
+
+    <string name="find">Find</string>
+    <string name="hint">Enter Place</string>
+    <string name="title_activity_geocode_jsonparser">GeocodeJSONParser</string>
+
 
 </resources>
