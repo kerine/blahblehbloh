@@ -27,10 +27,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class CameraActivity extends Activity {
-    ImageView viewImage;
-    Button b;
+    ImageView viewImageStart, viewImageEnd;
+    Button b, bu;
     String id;
-    String path;
+    String path, pathEnd;
     //String picturePath;
 
     FragmentManager fragmentManager = getFragmentManager();
@@ -42,14 +42,24 @@ public class CameraActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        b = (Button) findViewById(R.id.btnSelectPhoto);
-        viewImage = (ImageView) findViewById(R.id.viewImage);
+        b = (Button) findViewById(R.id.btnSelectPhotoStart);
+        viewImageStart = (ImageView) findViewById(R.id.viewImageStart);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
             }
         });
+
+        bu = (Button) findViewById(R.id.btnSelectPhotoEnd);
+        viewImageEnd = (ImageView) findViewById(R.id.viewImageEnd);
+        bu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage1();
+            }
+        });
+
 
         /*
         Fragment fragment1 = new NotesFragment();
@@ -115,6 +125,31 @@ public class CameraActivity extends Activity {
         builder.show();
     }
 
+    private void selectImage1() {
+
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(CameraActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Take Photo")) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                    startActivityForResult(intent, 3);
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, 4);
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -133,11 +168,10 @@ public class CameraActivity extends Activity {
 
                     bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
 
-                    viewImage.setImageBitmap(bitmap);
-
+                    viewImageStart.setImageBitmap(bitmap);
 
                     path = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    ;
+
                     f.delete();
                     OutputStream outFile = null;
                     File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
@@ -158,7 +192,6 @@ public class CameraActivity extends Activity {
                     e.printStackTrace();
                 }
             } else if (requestCode == 2) {
-
                 Uri selectedImage = data.getData();
                 String[] filePath = {MediaStore.Images.Media.DATA};
                 Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
@@ -168,29 +201,87 @@ public class CameraActivity extends Activity {
                 c.close();
                 Bitmap thumbnail = (BitmapFactory.decodeFile(path));
                 Log.w("path of image", path + "");
-                viewImage.setImageBitmap(thumbnail);
+                viewImageStart.setImageBitmap(thumbnail);
+            }
+
+            if (requestCode == 3) {
+                File f = new File(Environment.getExternalStorageDirectory().toString());
+                for (File temp : f.listFiles()) {
+                    if (temp.getName().equals("temp.jpg")) {
+                        f = temp;
+                        break;
+                    }
+                }
+                try {
+                    Bitmap bitmap;
+                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+
+                    bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), bitmapOptions);
+
+                    viewImageEnd.setImageBitmap(bitmap);
+
+                    pathEnd = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+                    f.delete();
+                    OutputStream outFile = null;
+                    File file = new File(pathEnd, String.valueOf(System.currentTimeMillis()) + ".jpg");
+                    pathEnd = pathEnd + String.valueOf(System.currentTimeMillis()) + ".jpg";
+                    try {
+                        outFile = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
+                        outFile.flush();
+                        outFile.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == 4) {
+
+                Uri selectedImage = data.getData();
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
+                c.moveToFirst();
+                int columnIndex = c.getColumnIndex(filePath[0]);
+                pathEnd = c.getString(columnIndex);
+                c.close();
+                Bitmap thumbnail = (BitmapFactory.decodeFile(pathEnd));
+                Log.w("path of image", pathEnd + "");
+                viewImageEnd.setImageBitmap(thumbnail);
             }
         }
     }
 
-
     public void goToMap(View view) {
+        EditText title = (EditText) findViewById(R.id.title);
+        String titleSent = title.getText().toString();
 
-        EditText text = (EditText) findViewById(R.id.notePad);
-        String notes = text.getText().toString();
+        EditText notesStart = (EditText) findViewById(R.id.notePadStart);
+        String notesStartSent = notesStart.getText().toString();
+
+        EditText notesEnd = (EditText) findViewById(R.id.notePadEnd);
+        String notesEndSent = notesEnd.getText().toString();
 
         Intent intent = new Intent(this, MapActivity.class);
 
         Bundle bundle = new Bundle();
-        bundle.putString("notes", notes);
+        bundle.putString("titleSent", titleSent);
+        bundle.putString("notesStartSent", notesStartSent);
+        bundle.putString("notesEndSent", notesEndSent);
+
         bundle.putString("path", path);
+        bundle.putString("pathEnd", pathEnd);
+
         intent.putExtras(bundle);
 
         int requestCode = 1;
         startActivityForResult(intent, requestCode);
 
         startActivity(intent);
-
     }
-
 }

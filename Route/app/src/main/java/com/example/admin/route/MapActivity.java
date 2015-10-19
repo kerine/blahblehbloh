@@ -39,9 +39,9 @@ public class MapActivity extends FragmentActivity {
     GoogleMap map;
     ArrayList<LatLng> markerPoints;
 
-    Button mBtnFind;
+    Button mBtnFind, mBtnFindEnd;
     GoogleMap mMap;
-    EditText etPlace;
+    EditText startPlace, endPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +50,19 @@ public class MapActivity extends FragmentActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        String notes = extras.getString("notes");
-        String path = extras.getString("path");
+        String titleSent = extras.getString("titleSent");
+        String notesStartSent = extras.getString("notesStartSent");
+        String notesEndSent = extras.getString("notesEndSent");
 
-        Toast.makeText(this, notes, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
+        String path = extras.getString("path");
+        String pathEnd = extras.getString("pathEnd");
+
+        Toast.makeText(this, titleSent + notesStartSent + notesEndSent, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, path + pathEnd, Toast.LENGTH_SHORT).show();
 
         // Getting reference to the find button
         mBtnFind = (Button) findViewById(R.id.btn_show);
+        mBtnFindEnd = (Button) findViewById(R.id.btn_showEnd);
 
         // Getting reference to the SupportMapFragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -66,17 +71,18 @@ public class MapActivity extends FragmentActivity {
         mMap = mapFragment.getMap();
 
         // Getting reference to EditText
-        etPlace = (EditText) findViewById(R.id.et_place);
+        startPlace = (EditText) findViewById(R.id.start_place);
+        endPlace = (EditText) findViewById(R.id.end_place);
 
-        // Setting click event listener for the find button
+        // Setting click event listener for the find Start button
         mBtnFind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Getting the place entered
-                String location = etPlace.getText().toString();
+                String location = startPlace.getText().toString();
 
                 if (location == null || location.equals("")) {
-                    Toast.makeText(getBaseContext(), "No Place is entered", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "No Start Location Entered", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -85,11 +91,51 @@ public class MapActivity extends FragmentActivity {
                 try {
                     // encoding special characters like space in the user input place
                     location = URLEncoder.encode(location, "utf-8");
+
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
 
                 String address = "address=" + location;
+
+                String sensor = "sensor=false";
+
+                // url , from where the geocoding data is fetched
+                url = url + address + "&" + sensor;
+
+                // Instantiating DownloadTask to get places from Google Geocoding service
+                // in a non-ui thread
+                DownloadTask downloadTask = new DownloadTask();
+
+                // Start downloading the geocoding places
+                downloadTask.execute(url);
+            }
+
+        });
+
+        // Setting click event listener for the find button
+        mBtnFindEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Getting the place entered
+                String locationEnd = endPlace.getText().toString();
+
+                if (locationEnd == null || locationEnd.equals("")) {
+                    Toast.makeText(getBaseContext(), "No End Location Entered", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String url = "https://maps.googleapis.com/maps/api/geocode/json?";
+
+                try {
+                    // encoding special characters like space in the user input place
+                    locationEnd = URLEncoder.encode(locationEnd, "utf-8");
+
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                String address = "address=" + locationEnd;
 
                 String sensor = "sensor=false";
 
@@ -140,7 +186,6 @@ public class MapActivity extends FragmentActivity {
             iStream.close();
             urlConnection.disconnect();
         }
-
         return data;
     }
 
@@ -188,10 +233,11 @@ public class MapActivity extends FragmentActivity {
         protected List<HashMap<String, String>> doInBackground(String... jsonData) {
 
             List<HashMap<String, String>> places = null;
-            GeocodeJSONParser parser = new GeocodeJSONParser();
 
             try {
                 jObject = new JSONObject(jsonData[0]);
+                GeocodeJSONParser parser = new GeocodeJSONParser();
+
 
                 /** Getting the parsed data as a an ArrayList */
                 places = parser.parse(jObject);
