@@ -38,6 +38,14 @@
             android:layout_gravity="center"
             android:text="@string/findEnd" />
 
+        <Button
+            android:id="@+id/btn_goVia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/next"
+            />
+
     </LinearLayout>
 
     <fragment
