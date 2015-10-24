@@ -1,5 +1,6 @@
 package com.example.admin.route;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goTo_CameraActivity(View view) {
         Intent myIntent = new Intent(this,CameraActivity.class);
+        startActivity(myIntent);
+    }
+
+    public void goTo_RouteList(View view) {
+        Intent myIntent = new Intent(this,RouteList.class);
         startActivity(myIntent);
     }
 }

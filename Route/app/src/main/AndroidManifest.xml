@@ -31,6 +31,22 @@
             android:name=".MapActivity"
             android:label="@string/title_activity_map" >
         </activity>
+        <activity
+            android:name=".MyDB"
+            android:label="@string/title_activity_my_db"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.admin.route.MainActivity" />
+        </activity>
+        <activity
+            android:name=".RouteList"
+            android:label="@string/title_activity_route_list"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.admin.route.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

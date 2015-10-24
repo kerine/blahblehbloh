@@ -1,12 +1,12 @@
 package com.example.admin.route;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
