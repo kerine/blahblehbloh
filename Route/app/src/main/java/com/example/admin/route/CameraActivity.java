@@ -27,10 +27,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class CameraActivity extends Activity {
+
+    MyDB db;
+
     ImageView viewImage;
     Button b;
     String id;
     String path;
+    String title;
     //String picturePath;
 
     FragmentManager fragmentManager = getFragmentManager();
@@ -42,6 +46,9 @@ public class CameraActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        //Instantiate Database
+        db = new MyDB(this);
+
         b = (Button) findViewById(R.id.btnSelectPhoto);
         viewImage = (ImageView) findViewById(R.id.viewImage);
         b.setOnClickListener(new View.OnClickListener() {
@@ -50,22 +57,6 @@ public class CameraActivity extends Activity {
                 selectImage();
             }
         });
-
-        /*
-        Fragment fragment1 = new NotesFragment();
-        Fragment fragment2 = new TimerFragment();
-
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout1, fragment1);
-        fragmentTransaction.commit();
-
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout2, fragment2);
-        fragmentTransaction.commit();
-        */
-
-        // nDbHelper = new NotesDbAdapter(this);
-        //  nDbHelper.open();
     }
 
     @Override
@@ -173,24 +164,45 @@ public class CameraActivity extends Activity {
         }
     }
 
+    //Code kept here to view bundle sending
+//    public void goToMap(View view) {
+//
+//        EditText text = (EditText) findViewById(R.id.notePad);
+//        String notes = text.getText().toString();
+//
+//        Intent intent = new Intent(this, MapActivity.class);
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString("notes", notes);
+//        bundle.putString("path", path);
+//        intent.putExtras(bundle);
+//
+//        int requestCode = 1;
+//        startActivityForResult(intent, requestCode);
+//
+//        startActivity(intent);
+//    }
 
-    public void goToMap(View view) {
+    public void goToShowActivity(View view) {
+
+        EditText routeName_Text = (EditText)findViewById(R.id.editText_routeName);
+        title = routeName_Text.getText().toString();
 
         EditText text = (EditText) findViewById(R.id.notePad);
         String notes = text.getText().toString();
 
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, RouteList.class);
 
-        Bundle bundle = new Bundle();
-        bundle.putString("notes", notes);
-        bundle.putString("path", path);
-        intent.putExtras(bundle);
+        //Put into Database
+        db.open();
+        long id = db.insertRoute(title, notes, path);
 
-        int requestCode = 1;
-        startActivityForResult(intent, requestCode);
-
+//        if(id > 0){
+//            Toast.makeText(this, "Add successful.", Toast.LENGTH_LONG).show();
+//        }
+//        else
+//            Toast.makeText(this, "Add failed.", Toast.LENGTH_LONG).show();
+        db.close();
         startActivity(intent);
-
     }
-
 }
