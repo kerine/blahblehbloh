@@ -49,7 +49,7 @@ public class ViaActivity extends FragmentActivity {
 
     double latStart, lngStart, latEnd, lngEnd, latVia1, lngVia1;
 
-    String titleSent, notesStartSent, notesEndSent, path, pathEnd, pathVia1;
+    String titleSent, notesStartSent, notesEndSent, notesVia1, path, pathEnd, pathVia1;
 
     EditText viaPlace1;
     ImageView viewImageVia1;
@@ -310,7 +310,7 @@ public class ViaActivity extends FragmentActivity {
 
                     f.delete();
                     OutputStream outFile = null;
-                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
+                    File file = new File(pathVia1, String.valueOf(System.currentTimeMillis()) + ".jpg");
                     pathVia1 = pathVia1 + String.valueOf(System.currentTimeMillis()) + ".jpg";
                     try {
                         outFile = new FileOutputStream(file);
@@ -364,42 +364,20 @@ public class ViaActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToMap(View view) {
-
-        EditText notesVia = (EditText) findViewById(R.id.notePadVia1);
-        String notesVia1 = notesVia.getText().toString();
-
-        Intent intent = new Intent(this, MapActivity.class);
-
-        Bundle bundle = new Bundle();
-        bundle.putString("titleSent", titleSent);
-        bundle.putString("notesStartSent", notesStartSent);
-        bundle.putString("notesEndSent", notesEndSent);
-
-        bundle.putString("path", path);
-        bundle.putString("pathEnd", pathEnd);
-
-        intent.putExtras(bundle);
-
-        int requestCode = 1;
-        startActivityForResult(intent, requestCode);
-
-        startActivity(intent);
-    }
 
     private void ViaOrEnd() {
-        final CharSequence[] options = {"Add another Point", "Save", "Cancel"};
+        final CharSequence[] options = {"Add Another Point", "Save", "Cancel"};
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ViaActivity.this);
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Add a Point")) {
+                if (options[item].equals("Add Another Point")) {
 
-                    Intent intent = new Intent(ViaActivity.this, ViaActivity.class);
+                    Intent intent = new Intent(ViaActivity.this, Via2Activity.class);
 
                     EditText notesVia = (EditText) findViewById(R.id.notePadVia1);
-                    String notesVia1 = notesVia.getText().toString();
+                    notesVia1 = notesVia.getText().toString();
 
                     Bundle bundle = new Bundle();
                     bundle.putString("titleSent", titleSent);
@@ -428,10 +406,10 @@ public class ViaActivity extends FragmentActivity {
 
                 } else if (options[item].equals("Save")) {
 
-                    Intent intent = new Intent(ViaActivity.this, ViaActivity.class);
+                    Intent intent = new Intent(ViaActivity.this, MainActivity.class);
 
                     EditText notesVia = (EditText) findViewById(R.id.notePadVia1);
-                    String notesVia1 = notesVia.getText().toString();
+                    notesVia1 = notesVia.getText().toString();
 
                     Bundle bundle = new Bundle();
                     bundle.putString("titleSent", titleSent);

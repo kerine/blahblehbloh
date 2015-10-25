@@ -1,8 +1,6 @@
 package com.example.admin.route;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -31,11 +29,6 @@ public class CameraActivity extends Activity {
     Button b, bu;
     String id;
     String path, pathEnd;
-    //String picturePath;
-
-    FragmentManager fragmentManager = getFragmentManager();
-    FragmentTransaction fragmentTransaction;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,23 +52,6 @@ public class CameraActivity extends Activity {
                 selectImage1();
             }
         });
-
-
-        /*
-        Fragment fragment1 = new NotesFragment();
-        Fragment fragment2 = new TimerFragment();
-
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout1, fragment1);
-        fragmentTransaction.commit();
-
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout2, fragment2);
-        fragmentTransaction.commit();
-        */
-
-        // nDbHelper = new NotesDbAdapter(this);
-        //  nDbHelper.open();
     }
 
     @Override
@@ -203,7 +179,6 @@ public class CameraActivity extends Activity {
                 Log.w("path of image", path + "");
                 viewImageStart.setImageBitmap(thumbnail);
             }
-
             if (requestCode == 3) {
                 File f = new File(Environment.getExternalStorageDirectory().toString());
                 for (File temp : f.listFiles()) {
@@ -242,7 +217,6 @@ public class CameraActivity extends Activity {
                     e.printStackTrace();
                 }
             } else if (requestCode == 4) {
-
                 Uri selectedImage = data.getData();
                 String[] filePath = {MediaStore.Images.Media.DATA};
                 Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);

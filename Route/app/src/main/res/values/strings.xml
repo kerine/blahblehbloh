@@ -21,6 +21,7 @@
 
     <string name="str_btn_draw">Draw Route</string>
 
+    <string name="current">Find Current</string>
     <string name="find">Find Start</string>
     <string name="findEnd">Find End</string>
     <string name="findVia">Find Via</string>
@@ -31,12 +32,18 @@
     <string name="hint1">Enter End Location</string>
     <string name="hint2">Enter Via Location</string>
 
+    <string name="addMarker">Add Marker</string>
+
 
     <string name="title_activity_geocode_jsonparser">GeocodeJSONParser</string>
 
     <string name="title">Title</string>
     <string name="notes">Notes</string>
     <string name="title_activity_via">ViaActivity</string>
+    <string name="title_activity_via2">Via2Activity</string>
+    <string name="title_activity_current_location">CurrentLocationActivity</string>
+    <string name="title_activity_info">InfoActivity</string>
+    <string name="title_activity_detail">DetailActivity</string>
 
 
 </resources>
