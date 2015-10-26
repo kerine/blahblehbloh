@@ -1,16 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.admin.route.MapActivity">
-
-    <EditText
-        android:id="@+id/start_place"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint"
-        android:inputType="text" />
+    tools:context="com.example.admin.route.CurrentLocationActivity"
+    >
 
     <EditText
         android:id="@+id/end_place"
@@ -24,13 +17,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
         <Button
-            android:id="@+id/btn_show"
+            android:id="@+id/btn_addMarker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="@string/find" />
+            android:text="@string/addMarker">
+        </Button>
 
         <Button
             android:id="@+id/btn_showEnd"

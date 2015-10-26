@@ -4,6 +4,33 @@
     android:orientation="vertical"
     tools:context="com.example.admin.route.CameraActivity">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:layout_gravity="center_horizontal|top"
+        android:hint="@string/title"
+        />
+<!-- Start of Start Location -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Start Location"
+            android:id="@+id/startTitle" />
+
+        <ImageView
+            android:id="@+id/viewImageStart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/camera" />
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,31 +44,65 @@
             android:layout_gravity="center_horizontal" />
 
         <Button
-            android:id="@+id/btnSelectPhoto"
+            android:id="@+id/btnSelectPhotoStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Select Photo" />
 
     </LinearLayout>
 
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/notePadStart"
+        android:layout_gravity="center_horizontal|top"
+        android:hint="@string/notes"
+        />
+
+<!-- Start of End Location -->
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="120dp"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="End Location"
+            android:id="@+id/endTitle" />
+
         <ImageView
-            android:id="@+id/viewImage"
+            android:id="@+id/viewImageEnd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/camera" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnSelectPhotoEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Photo" />
+
+    </LinearLayout>
+
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/notePad"
+        android:id="@+id/notePadEnd"
         android:layout_gravity="center_horizontal|top"
+        android:hint="@string/notes"
         />
+
 
     <!--
     <FrameLayout

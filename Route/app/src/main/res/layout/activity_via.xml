@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.admin.route.ViaActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Via Location"
+            android:id="@+id/startTitle" />
+
+        <ImageView
+            android:id="@+id/viewImageStart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/camera" />
+    </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSelectPhotoVia1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Photo" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/notePadVia1"
+        android:layout_gravity="center_horizontal|top"
+        android:hint="@string/notes"
+        />
+
+    <EditText
+        android:id="@+id/via_place1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/hint2"
+        android:inputType="text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_show_via1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/findVia" />
+
+        <Button
+            android:id="@+id/btn_goVia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            />
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>
