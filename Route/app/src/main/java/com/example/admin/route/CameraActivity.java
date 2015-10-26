@@ -27,14 +27,18 @@ import java.io.OutputStream;
 public class CameraActivity extends Activity {
     ImageView viewImageStart, viewImageEnd;
     Button b, bu;
+    MyDB db;
     String id;
-    String path, pathEnd;
+    String path, pathEnd, title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        //Instantiate Database
+        db = new MyDB(this);
+        
         b = (Button) findViewById(R.id.btnSelectPhotoStart);
         viewImageStart = (ImageView) findViewById(R.id.viewImageStart);
         b.setOnClickListener(new View.OnClickListener() {
@@ -231,31 +235,55 @@ public class CameraActivity extends Activity {
         }
     }
 
-    public void goToMap(View view) {
-        EditText title = (EditText) findViewById(R.id.title);
-        String titleSent = title.getText().toString();
+//    public void goToMap(View view) {
+//        EditText title = (EditText) findViewById(R.id.title);
+//        String titleSent = title.getText().toString();
+//
+//        EditText notesStart = (EditText) findViewById(R.id.notePadStart);
+//        String notesStartSent = notesStart.getText().toString();
+//
+//        EditText notesEnd = (EditText) findViewById(R.id.notePadEnd);
+//        String notesEndSent = notesEnd.getText().toString();
+//
+//        Intent intent = new Intent(this, MapActivity.class);
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString("titleSent", titleSent);
+//        bundle.putString("notesStartSent", notesStartSent);
+//        bundle.putString("notesEndSent", notesEndSent);
+//
+//        bundle.putString("path", path);
+//        bundle.putString("pathEnd", pathEnd);
+//
+//        intent.putExtras(bundle);
+//
+//        int requestCode = 1;
+//        startActivityForResult(intent, requestCode);
+//
+//        startActivity(intent);
+//
+//    }
 
-        EditText notesStart = (EditText) findViewById(R.id.notePadStart);
-        String notesStartSent = notesStart.getText().toString();
+    public void goToShowActivity(View view) {
 
-        EditText notesEnd = (EditText) findViewById(R.id.notePadEnd);
-        String notesEndSent = notesEnd.getText().toString();
+        EditText routeName_Text = (EditText)findViewById(R.id.editText_routeName);
+        title = routeName_Text.getText().toString();
 
-        Intent intent = new Intent(this, MapActivity.class);
+        EditText text = (EditText) findViewById(R.id.notePad);
+        String notes = text.getText().toString();
 
-        Bundle bundle = new Bundle();
-        bundle.putString("titleSent", titleSent);
-        bundle.putString("notesStartSent", notesStartSent);
-        bundle.putString("notesEndSent", notesEndSent);
+        Intent intent = new Intent(this, RouteList.class);
 
-        bundle.putString("path", path);
-        bundle.putString("pathEnd", pathEnd);
+        //Put into Database
+        db.open();
+        long id = db.insertRoute(title, notes, path);
 
-        intent.putExtras(bundle);
-
-        int requestCode = 1;
-        startActivityForResult(intent, requestCode);
-
+//        if(id > 0){
+//            Toast.makeText(this, "Add successful.", Toast.LENGTH_LONG).show();
+//        }
+//        else
+//            Toast.makeText(this, "Add failed.", Toast.LENGTH_LONG).show();
+        db.close();
         startActivity(intent);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.admin.route;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     double latStart, lngStart, latEnd, lngEnd, latVia1, lngVia1, latVia2, lngVia2;
 
@@ -81,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void goTo_CurrentLocationActivity(View view) {
         Intent myIntent = new Intent(this,CurrentLocationActivity.class);
+        startActivity(myIntent);
+    }
+
+    public void goTo_RouteList(View view) {
+        Intent myIntent = new Intent(this,RouteList.class);
         startActivity(myIntent);
     }
 }
