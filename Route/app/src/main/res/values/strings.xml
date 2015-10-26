@@ -33,5 +33,7 @@
     <string name="btnBack">Click to go back</string>
     <string name="show_Route">Submit to Database and Show Route</string>
     <string name="route_list">View Existing Routes</string>
-
+    <string name="delete_record">Delete Record</string>
+    <string name="title_activity_show_route">ShowRouteActivity</string>
+    <string name="view_Route">See Route Details</string>
 </resources>

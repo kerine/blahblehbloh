@@ -1,15 +1,14 @@
 package com.example.admin.route;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,9 +16,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+
 public class RouteList extends Activity {
 
     MyDB db;
+    long itemID = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,9 @@ public class RouteList extends Activity {
         //set adapter for the list view
         ListView myList = (ListView) findViewById(R.id.routeList);
         myList.setAdapter(myCursorAdapter);
+
+        //this is important to stop managing cursor, or will cause Error when going back
+        stopManagingCursor(cursor);
         db.close();
     }
 
@@ -87,40 +91,61 @@ public class RouteList extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View viewClicked,
                                     int position, long idInDB) {
+                viewClicked.setSelected(true);
 
-                // Getting the Container Layout of the ListView
-                LinearLayout linearLayoutParent = (LinearLayout) viewClicked;
-
-                // Getting Route Name
-                TextView routeName = (TextView) linearLayoutParent.getChildAt(0);
-                // Getting Route Name
-                TextView routeStart = (TextView) linearLayoutParent.getChildAt(1);
-                // Getting Route Name
-                TextView routeEnd = (TextView) linearLayoutParent.getChildAt(2);
-
-                Toast.makeText(getBaseContext(), routeName.getText().toString() + " " +
-                        routeStart.getText().toString() + " " + routeEnd.getText().toString()
-                        , Toast.LENGTH_SHORT).show();
+//                db.open();
+                  itemID = idInDB;
+//                Cursor c = db.getRoute(itemID);
+//                c.moveToPosition(0);
+//                String title = c.getString(1);
+//                String note = c.getString(2);
+//                String photopath = c.getString(3);
+//                Toast.makeText(getBaseContext(), "title: " + title + ", note: " + note +
+//                        ",photo_path: " + photopath, Toast.LENGTH_SHORT).show();
+//
+//                //set condition if delete button is clicked, delete record.
+//
+//
+//                //set condition if show button is clicked, redirect to next page and fill with these info
+//
+//                db.close();
             }
         });
     }
 
-//    private void displayToastForId(long idInDB) {
-//        Cursor cursor = db.getRoute(idInDB);
-//        if (cursor.moveToFirst()) {
-//            long idDB = cursor.getLong(MyDBHelper.columnName_routeID);
-//            String name = cursor.getString(DBAdapter.COL_NAME);
-//            int studentNum = cursor.getInt(DBAdapter.COL_STUDENTNUM);
-//            String favColour = cursor.getString(DBAdapter.COL_FAVCOLOUR);
-//
-//            String message = "ID: " + idDB + "\n"
-//                    + "Name: " + name + "\n"
-//                    + "Std#: " + studentNum + "\n"
-//                    + "FavColour: " + favColour;
-//            Toast.makeText(RouteList.this, message, Toast.LENGTH_LONG).show();
-//        }
-//        cursor.close();
-//    }
+    public void onShow(View view){
+        if (itemID == -1) {
+            return;
+        }
+        else{
+            Intent myIntent = new Intent(this, ShowRouteActivity.class);
+            myIntent.putExtra("routeID",itemID);
+            startActivity(myIntent);
+        }
+    }
+
+    public void onDelete(View view){
+
+        db.open();
+        //if we haven't clicked a list item yet, do nothing
+        if (itemID == -1){
+            return;
+        }
+        else{
+            db.deleteRoute(itemID);
+            itemID = -1;
+        }
+        populateListViewFromDB();
+        db.close();
+    }
+
+    public void onClick_deleteAllRecords(View view) {
+
+        db.open();
+        db.deleteAllRoute();
+        populateListViewFromDB();
+        db.close();
+    }
 
     public void onClick_BacktoCallingActivity(View view){
 
