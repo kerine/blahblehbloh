@@ -266,7 +266,6 @@ public class CameraActivity extends Activity {
 
     public void goToShowActivity(View view) {
 
-<<<<<<< HEAD
         EditText routeName_Text = (EditText)findViewById(R.id.title);
         title = routeName_Text.getText().toString();
 
@@ -275,23 +274,15 @@ public class CameraActivity extends Activity {
 
         EditText notesEnd = (EditText) findViewById(R.id.notePadEnd);
         String notesEndSent = notesEnd.getText().toString();
-=======
-        EditText routeName_Text = (EditText)findViewById(R.id.editText_routeName);
-        title = routeName_Text.getText().toString();
-
+        
         EditText text = (EditText) findViewById(R.id.notePad);
         String notes = text.getText().toString();
->>>>>>> origin/create-route
 
         Intent intent = new Intent(this, RouteList.class);
 
         //Put into Database
         db.open();
-<<<<<<< HEAD
         long id = db.insertRoute(title, notesStartSent, path);
-=======
-        long id = db.insertRoute(title, notes, path);
->>>>>>> origin/create-route
 
 //        if(id > 0){
 //            Toast.makeText(this, "Add successful.", Toast.LENGTH_LONG).show();
