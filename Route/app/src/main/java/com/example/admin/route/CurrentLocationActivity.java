@@ -27,6 +27,7 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
     EditText startPlace, endPlace;
     double latStart, lngStart, latEnd, lngEnd;
     String titleSent, notesStartSent, notesEndSent, path, pathEnd;
+    String id;
 
     int count = 0;
 
@@ -67,6 +68,8 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
                 tvLat.setText("Latitude:" + latLng.latitude);
                 // Setting the longitude
                 tvLng.setText("Longitude:" + latLng.longitude);
+                id = marker.getId();
+
                 goTo_DetailActivity(v);
 
                 // Returning the view containing InfoWindow contents

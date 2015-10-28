@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.admin.route.CameraActivity">
+    tools:context="com.example.admin.route.CameraActivity"
+    >
 
     <EditText
         android:layout_width="match_parent"
@@ -43,7 +44,6 @@
             android:text="Select Photo" />
 
     </LinearLayout>
-
 
     <EditText
         android:layout_width="match_parent"
@@ -87,7 +87,6 @@
 
     </LinearLayout>
 
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -120,6 +119,15 @@
         android:id="@+id/button4"
         android:layout_gravity="center_horizontal"
         android:onClick="goToMap"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit and Show Route"
+        android:id="@+id/button5"
+        android:layout_gravity="center_horizontal"
+        android:onClick="goToShowActivity"
         />
 
 </LinearLayout>
