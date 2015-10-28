@@ -37,6 +37,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_routeName"
+            android:hint="@string/Route_hint"
+            android:layout_gravity="center_horizontal" />
+
         <Button
             android:id="@+id/btnSelectPhotoStart"
             android:layout_width="match_parent"
