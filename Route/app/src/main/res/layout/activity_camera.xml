@@ -1,141 +1,121 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView1"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.admin.route.CameraActivity">
+    android:fillViewport="true" >
 
-    <EditText
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/title"
-        android:layout_gravity="center_horizontal|top"
-        android:hint="@string/title"
-        />
-<!-- Start of Start Location -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Start Location"
-            android:id="@+id/startTitle" />
-
-        <ImageView
-            android:id="@+id/viewImageStart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/camera" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.example.admin.route.CameraActivity">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText_routeName"
-            android:hint="@string/Route_hint"
-            android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:id="@+id/btnSelectPhotoStart"
+            android:id="@+id/title"
+            android:layout_gravity="center_horizontal|top"
+            android:hint="@string/title"
+            />
+        <!-- Picture and Notes for Start Location -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Photo" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Start Location"
+                android:id="@+id/startTitle" />
 
+            <ImageView
+                android:id="@+id/viewImageStart"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:src="@drawable/camera" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/notePadStart"
-        android:layout_gravity="center_horizontal|top"
-        android:hint="@string/notes"
-        />
+            <Button
+                android:id="@+id/btnSelectPhotoStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Photo" />
 
-<!-- Start of End Location -->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:id="@+id/notePadStart"
+                android:layout_gravity="center_horizontal|top"
+                android:hint="@string/notes"
+                android:isScrollContainer="true"
+                />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:orientation="vertical">
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="End Location"
-            android:id="@+id/endTitle" />
-
-        <ImageView
-            android:id="@+id/viewImageEnd"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/camera" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnSelectPhotoEnd"
+        <!-- Picture and Notes for End Location -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Photo" />
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="End Location"
+                android:id="@+id/endTitle" />
+
+            <ImageView
+                android:id="@+id/viewImageEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:src="@drawable/camera" />
+
+            <Button
+                android:id="@+id/btnSelectPhotoEnd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Photo" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:id="@+id/notePadEnd"
+                android:layout_gravity="center_horizontal|top"
+                android:hint="@string/notes"
+                android:isScrollContainer="true"
+                />
+
+        </LinearLayout>
+
+        <!-- Buttons  -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Locations"
+                android:id="@+id/button4"
+                android:layout_gravity="center_horizontal"
+                android:onClick="goToMap"
+                />
+
+            <!--<Button-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Submit and Show Route"-->
+                <!--android:id="@+id/button5"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:onClick="goToShowActivity"-->
+                <!--/>-->
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/notePadEnd"
-        android:layout_gravity="center_horizontal|top"
-        android:hint="@string/notes"
-        />
-
-
-    <!--
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/frameLayout1"
-        >
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/frameLayout2"
-        >
-    </FrameLayout>
-    -->
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:id="@+id/button4"
-        android:layout_gravity="center_horizontal"
-        android:onClick="goToMap"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit and Show Route"
-        android:id="@+id/button5"
-        android:layout_gravity="center_horizontal"
-        android:onClick="goToShowActivity"
-        />
-
-</LinearLayout>
+</ScrollView>

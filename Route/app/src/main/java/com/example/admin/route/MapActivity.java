@@ -47,11 +47,15 @@ public class MapActivity extends FragmentActivity {
     EditText startPlace, endPlace;
     double latStart, lngStart, latEnd, lngEnd;
     String titleSent, notesStartSent, notesEndSent, path, pathEnd;
+    MyDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        //Instantiate Database
+        db = new MyDB(this);
 
         Bundle extras = getIntent().getExtras();
 
@@ -62,8 +66,8 @@ public class MapActivity extends FragmentActivity {
         path = extras.getString("path");
         pathEnd = extras.getString("pathEnd");
 
-        Toast.makeText(this, titleSent + notesStartSent + notesEndSent, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, path + pathEnd, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
+                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
 
         // Getting reference to the find button
         mBtnFind = (Button) findViewById(R.id.btn_show);
@@ -176,7 +180,7 @@ public class MapActivity extends FragmentActivity {
             data = sb.toString();
             br.close();
         } catch (Exception e) {
-            Log.d("Exception while downloading url", e.toString());
+            Log.d("Could not download URL", e.toString());
         } finally {
             iStream.close();
             urlConnection.disconnect();
@@ -436,27 +440,37 @@ public class MapActivity extends FragmentActivity {
 
                 } else if (options[item].equals("Save")) {
 
-                    Intent intent = new Intent(MapActivity.this, MainActivity.class);
+                    String[] arrayStart = new String[4];
+                    arrayStart[0] = notesStartSent;
+                    arrayStart[1] = path;
+                    arrayStart[2] = String.valueOf(latStart);
+                    arrayStart[3] = String.valueOf(lngStart);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("titleSent", titleSent);
-                    bundle.putString("notesStartSent", notesStartSent);
-                    bundle.putString("notesEndSent", notesEndSent);
+                    String[] arrayEnd = new String[4];
+                    arrayEnd[0] = notesEndSent;
+                    arrayEnd[1] = pathEnd;
+                    arrayEnd[2] = String.valueOf(latEnd);
+                    arrayEnd[3] = String.valueOf(lngEnd);
 
-                    bundle.putString("path", path);
-                    bundle.putString("pathEnd", pathEnd);
+                    String arrayStart_String = convertArrayToString(arrayStart);
+                    String arrayEnd_String = convertArrayToString(arrayEnd);
 
-                    bundle.putDouble("latStart", latStart);
-                    bundle.putDouble("lngStart", lngStart);
-                    bundle.putDouble("latEnd", latEnd);
-                    bundle.putDouble("lngEnd", lngEnd);
+                    Intent intent = new Intent(MapActivity.this, RouteList.class);
 
-                    intent.putExtras(bundle);
+                    //store title, path, notesStartSent, latStart, lngStart, pathEnd, notesEndSent, pathEnd, latEnd, lngEnd
 
-                    int requestCode = 1;
-                    startActivityForResult(intent, requestCode);
+                    db.open();
+                    long id = db.insertRoute(titleSent, arrayStart_String, arrayEnd_String);
+//                     if(id > 0){
+//                    Toast.makeText(MapActivity.this, "Add successful.", Toast.LENGTH_LONG).show();
+//                     }
+//                     else
+//                    Toast.makeText(MapActivity.this, "Add failed.", Toast.LENGTH_LONG).show();
+                    db.close();
+
 
                     startActivity(intent);
+
 
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -465,4 +479,25 @@ public class MapActivity extends FragmentActivity {
         });
         builder.show();
     }
+
+    public static String strSeparator = "__,__";
+
+    public static String convertArrayToString(String[] array){
+        String str = "";
+        for (int i = 0;i<array.length; i++) {
+            str = str+array[i];
+            // Do not append comma at the end of last element
+            if(i<array.length-1){
+                str = str+strSeparator;
+            }
+        }
+        return str;
+    }
+
+    public static String[] convertStringToArray(String str){
+        String[] arr = str.split(strSeparator);
+        return arr;
+    }
+
+
 }

@@ -37,6 +37,27 @@ public class MyDB {
         return db.insert(MyDBHelper.tableName, null, initialValues);
     }
 
+    public long insertRoute(String route_str, String notes_str, String path_str, String via1_str) {
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(MyDBHelper.columnName_routeName, route_str);
+        initialValues.put(MyDBHelper.columnName_routeStart, notes_str);
+        initialValues.put(MyDBHelper.columnName_routeEnd, path_str);
+        initialValues.put(MyDBHelper.columnName_routeVia1, via1_str);
+
+        return db.insert(MyDBHelper.tableName, null, initialValues);
+    }
+
+    public long insertRoute(String route_str, String notes_str, String path_str, String via1_str, String via2_str) {
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(MyDBHelper.columnName_routeName, route_str);
+        initialValues.put(MyDBHelper.columnName_routeStart, notes_str);
+        initialValues.put(MyDBHelper.columnName_routeEnd, path_str);
+        initialValues.put(MyDBHelper.columnName_routeVia1, via1_str);
+        initialValues.put(MyDBHelper.columnName_routeVia2, via2_str);
+
+        return db.insert(MyDBHelper.tableName, null, initialValues);
+    }
+
     public int deleteRoute(long id) {
         return  db.delete(MyDBHelper.tableName, MyDBHelper.columnName_routeID + "=" + id, null);
     }
@@ -50,6 +71,7 @@ public class MyDB {
         initialValues.put(MyDBHelper.columnName_routeName, route_str);
         initialValues.put(MyDBHelper.columnName_routeStart, notes_str);
         initialValues.put(MyDBHelper.columnName_routeEnd, path_str);
+
         return db.update(MyDBHelper.tableName, initialValues, MyDBHelper.columnName_routeID + "=" + id, null);
     }
 
@@ -60,7 +82,9 @@ public class MyDB {
                         MyDBHelper.columnName_routeID,
                         MyDBHelper.columnName_routeName,
                         MyDBHelper.columnName_routeStart,
-                        MyDBHelper.columnName_routeEnd},
+                        MyDBHelper.columnName_routeEnd,
+                        MyDBHelper.columnName_routeVia1,
+                        MyDBHelper.columnName_routeVia2},
                 null, null, null, null, null);
     }
 

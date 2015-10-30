@@ -61,5 +61,6 @@
     <string name="btnBack">Click to go back</string>
     <string name="show_Route">Submit to Database and Show Route</string>
     <string name="route_list">View Existing Routes</string>
+    <string name="btnBackToMain">Click to go Main Page</string>
 
 </resources>

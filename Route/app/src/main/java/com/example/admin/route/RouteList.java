@@ -1,6 +1,7 @@
 package com.example.admin.route;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -63,9 +64,10 @@ public class RouteList extends Activity {
         startManagingCursor(cursor);
 
         //Setup Mapping from cursor to view Fields:
-        String[] fromFieldNames = new String[]{MyDBHelper.columnName_routeName, MyDBHelper.columnName_routeStart, MyDBHelper.columnName_routeEnd};
+        String[] fromFieldNames = new String[]{MyDBHelper.columnName_routeName, MyDBHelper.columnName_routeStart,
+                MyDBHelper.columnName_routeEnd ,  MyDBHelper.columnName_routeVia1, MyDBHelper.columnName_routeVia2};
 
-        int[] toViewIDs = new int[]{R.id.route_name, R.id.start_loc, R.id.end_loc};
+        int[] toViewIDs = new int[]{R.id.route_name, R.id.start_loc, R.id.end_loc, R.id.via1_loc, R.id.via2_loc};
 
 
         //create adaptor to may columns of the database into elements of the UI
@@ -97,34 +99,22 @@ public class RouteList extends Activity {
                 TextView routeStart = (TextView) linearLayoutParent.getChildAt(1);
                 // Getting Route Name
                 TextView routeEnd = (TextView) linearLayoutParent.getChildAt(2);
+                // Getting Route Name
+                TextView routeVia1 = (TextView) linearLayoutParent.getChildAt(3);
+                // Getting Route Name
+                TextView routeVia2 = (TextView) linearLayoutParent.getChildAt(4);
 
                 Toast.makeText(getBaseContext(), routeName.getText().toString() + " " +
-                        routeStart.getText().toString() + " " + routeEnd.getText().toString()
+                        routeStart.getText().toString() + " " + routeEnd.getText().toString() + " " + routeVia1.getText().toString() + " " + routeVia2.getText().toString()
                         , Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-//    private void displayToastForId(long idInDB) {
-//        Cursor cursor = db.getRoute(idInDB);
-//        if (cursor.moveToFirst()) {
-//            long idDB = cursor.getLong(MyDBHelper.columnName_routeID);
-//            String name = cursor.getString(DBAdapter.COL_NAME);
-//            int studentNum = cursor.getInt(DBAdapter.COL_STUDENTNUM);
-//            String favColour = cursor.getString(DBAdapter.COL_FAVCOLOUR);
-//
-//            String message = "ID: " + idDB + "\n"
-//                    + "Name: " + name + "\n"
-//                    + "Std#: " + studentNum + "\n"
-//                    + "FavColour: " + favColour;
-//            Toast.makeText(RouteList.this, message, Toast.LENGTH_LONG).show();
-//        }
-//        cursor.close();
-//    }
+    public void onClick_BackToMain(View view){
 
-    public void onClick_BacktoCallingActivity(View view){
-
-        finish();
+        Intent myIntent = new Intent(this,MainActivity.class);
+        startActivity(myIntent);
     }
 
 }
