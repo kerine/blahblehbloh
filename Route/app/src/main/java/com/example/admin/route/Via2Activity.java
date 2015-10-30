@@ -54,11 +54,15 @@ public class Via2Activity extends FragmentActivity {
     EditText viaPlace2;
     ImageView viewImageVia2;
     Button b, mBtnVia2, buttonVia2;
+    MyDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_via2);
+
+        //Instantiate Database
+        db = new MyDB(this);
 
         Bundle extras = getIntent().getExtras();
 
@@ -79,9 +83,12 @@ public class Via2Activity extends FragmentActivity {
         latVia1 = extras.getDouble("latVia1");
         lngVia1 = extras.getDouble("lngVia1");
 
-        Toast.makeText(this, titleSent + notesStartSent + notesEndSent + notesVia1, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, path + pathEnd + pathVia1, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, String.format("%.6f", latStart) + String.format("%.6f", lngStart) + String.format("%.6f", latEnd) + String.format("%.6f", lngEnd) + String.format("%.6f", latVia1) + String.format("%.6f", lngVia1), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
+                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
+
+        Toast.makeText(this, "START LATLNG:" + String.format("%.6f", latStart) + String.format("%.6f", lngStart),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "END LATLNG:" + String.format("%.6f", latEnd) + String.format("%.6f", lngEnd), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "VIA_POINT_1 LATLNG:" + String.format("%.6f", latVia1) + String.format("%.6f", lngVia1), Toast.LENGTH_SHORT).show();
 
 
         b = (Button) findViewById(R.id.btnSelectPhotoVia2);
@@ -161,7 +168,7 @@ public class Via2Activity extends FragmentActivity {
             data = sb.toString();
             br.close();
         } catch (Exception e) {
-            Log.d("Exception while downloading url", e.toString());
+            Log.d("Could not download URL", e.toString());
         } finally {
             iStream.close();
             urlConnection.disconnect();
@@ -414,39 +421,53 @@ public class Via2Activity extends FragmentActivity {
 
                 } else if (options[item].equals("Save")) {
 
-                    Intent intent = new Intent(Via2Activity.this, MainActivity.class);
-
                     EditText notesVia = (EditText) findViewById(R.id.notePadVia2);
                     notesVia2 = notesVia.getText().toString();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("titleSent", titleSent);
-                    bundle.putString("notesStartSent", notesStartSent);
-                    bundle.putString("notesEndSent", notesEndSent);
-                    bundle.putString("notesVia1", notesVia1);
-                    bundle.putString("notesVia2", notesVia2);
+                    String[] arrayStart = new String[4];
+                    arrayStart[0] = notesStartSent;
+                    arrayStart[1] = path;
+                    arrayStart[2] = String.valueOf(latStart);
+                    arrayStart[3] = String.valueOf(lngStart);
 
-                    bundle.putString("path", path);
-                    bundle.putString("pathEnd", pathEnd);
-                    bundle.putString("pathVia1",pathVia1);
-                    bundle.putString("pathVia2",pathVia2);
+                    String[] arrayEnd = new String[4];
+                    arrayEnd[0] = notesEndSent;
+                    arrayEnd[1] = pathEnd;
+                    arrayEnd[2] = String.valueOf(latEnd);
+                    arrayEnd[3] = String.valueOf(lngEnd);
 
-                    bundle.putDouble("latStart", latStart);
-                    bundle.putDouble("lngStart", lngStart);
-                    bundle.putDouble("latEnd", latEnd);
-                    bundle.putDouble("lngEnd", lngEnd);
+                    String[] arrayVia1 = new String[4];
+                    arrayVia1[0] = notesVia1;
+                    arrayVia1[1] = pathVia1;
+                    arrayVia1[2] = String.valueOf(latVia1);
+                    arrayVia1[3] = String.valueOf(lngVia1);
 
-                    bundle.putDouble("latVia1", latVia1);
-                    bundle.putDouble("lngVia1", lngVia1);
-                    bundle.putDouble("latVia2", latVia2);
-                    bundle.putDouble("lngVia2", lngVia2);
+                    String[] arrayVia2 = new String[4];
+                    arrayVia2[0] = notesVia2;
+                    arrayVia2[1] = pathVia2;
+                    arrayVia2[2] = String.valueOf(latVia2);
+                    arrayVia2[3] = String.valueOf(lngVia2);
 
-                    intent.putExtras(bundle);
+                    String arrayStart_String = convertArrayToString(arrayStart);
+                    String arrayEnd_String = convertArrayToString(arrayEnd);
+                    String arrayVia1_String = convertArrayToString(arrayVia1);
+                    String arrayVia2_String = convertArrayToString(arrayVia2);
 
-                    int requestCode = 1;
-                    startActivityForResult(intent, requestCode);
+                    Intent intent = new Intent(Via2Activity.this, RouteList.class);
+
+                    db.open();
+
+                    //need to include one more parameter
+                    long id = db.insertRoute(titleSent, arrayStart_String, arrayEnd_String, arrayVia1_String, arrayVia2_String);
+//                     if(id > 0){
+//                    Toast.makeText(MapActivity.this, "Add successful.", Toast.LENGTH_LONG).show();
+//                     }
+//                     else
+//                    Toast.makeText(MapActivity.this, "Add failed.", Toast.LENGTH_LONG).show();
+                    db.close();
 
                     startActivity(intent);
+
 
                 } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -454,5 +475,19 @@ public class Via2Activity extends FragmentActivity {
             }
         });
         builder.show();
+    }
+
+    public static String strSeparator = "__,__";
+
+    public static String convertArrayToString(String[] array){
+        String str = "";
+        for (int i = 0;i<array.length; i++) {
+            str = str+array[i];
+            // Do not append comma at the end of last element
+            if(i<array.length-1){
+                str = str+strSeparator;
+            }
+        }
+        return str;
     }
 }

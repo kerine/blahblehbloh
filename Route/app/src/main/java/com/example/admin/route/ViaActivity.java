@@ -1,5 +1,6 @@
 package com.example.admin.route;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -54,11 +55,15 @@ public class ViaActivity extends FragmentActivity {
     EditText viaPlace1;
     ImageView viewImageVia1;
     Button b, mBtnVia1, buttonVia2;
+    MyDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_via);
+
+        //Instantiate Database
+        db = new MyDB(this);
 
         Bundle extras = getIntent().getExtras();
 
@@ -74,9 +79,11 @@ public class ViaActivity extends FragmentActivity {
         latEnd = extras.getDouble("latEnd");
         lngEnd = extras.getDouble("lngEnd");
 
-        Toast.makeText(this, titleSent + notesStartSent + notesEndSent, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, path + pathEnd, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, String.format("%.6f", latStart) + String.format("%.6f", lngStart) + String.format("%.6f", latEnd) + String.format("%.6f", lngEnd), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
+                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
+
+        Toast.makeText(this, "START LATLNG:" + String.format("%.6f", latStart) + String.format("%.6f", lngStart),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "END LATLNG:" + String.format("%.6f", latEnd) + String.format("%.6f", lngEnd), Toast.LENGTH_LONG).show();
 
 
         b = (Button) findViewById(R.id.btnSelectPhotoVia1);
@@ -156,7 +163,7 @@ public class ViaActivity extends FragmentActivity {
             data = sb.toString();
             br.close();
         } catch (Exception e) {
-            Log.d("Exception while downloading url", e.toString());
+            Log.d("Could not download URL", e.toString());
         } finally {
             iStream.close();
             urlConnection.disconnect();
@@ -406,33 +413,43 @@ public class ViaActivity extends FragmentActivity {
 
                 } else if (options[item].equals("Save")) {
 
-                    Intent intent = new Intent(ViaActivity.this, MainActivity.class);
-
                     EditText notesVia = (EditText) findViewById(R.id.notePadVia1);
                     notesVia1 = notesVia.getText().toString();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("titleSent", titleSent);
-                    bundle.putString("notesStartSent", notesStartSent);
-                    bundle.putString("notesEndSent", notesEndSent);
-                    bundle.putString("notesVia1", notesVia1);
+                    String[] arrayStart = new String[4];
+                    arrayStart[0] = notesStartSent;
+                    arrayStart[1] = path;
+                    arrayStart[2] = String.valueOf(latStart);
+                    arrayStart[3] = String.valueOf(lngStart);
 
-                    bundle.putString("path", path);
-                    bundle.putString("pathEnd", pathEnd);
-                    bundle.putString("pathVia1",pathVia1);
+                    String[] arrayEnd = new String[4];
+                    arrayEnd[0] = notesEndSent;
+                    arrayEnd[1] = pathEnd;
+                    arrayEnd[2] = String.valueOf(latEnd);
+                    arrayEnd[3] = String.valueOf(lngEnd);
 
-                    bundle.putDouble("latStart", latStart);
-                    bundle.putDouble("lngStart", lngStart);
-                    bundle.putDouble("latEnd", latEnd);
-                    bundle.putDouble("lngEnd", lngEnd);
+                    String[] arrayVia1 = new String[4];
+                    arrayVia1[0] = notesVia1;
+                    arrayVia1[1] = pathVia1;
+                    arrayVia1[2] = String.valueOf(latVia1);
+                    arrayVia1[3] = String.valueOf(lngVia1);
 
-                    bundle.putDouble("latVia1", latVia1);
-                    bundle.putDouble("lngVia1", lngVia1);
+                    String arrayStart_String = convertArrayToString(arrayStart);
+                    String arrayEnd_String = convertArrayToString(arrayEnd);
+                    String arrayVia1_String = convertArrayToString(arrayVia1);
 
-                    intent.putExtras(bundle);
+                    Intent intent = new Intent(ViaActivity.this, RouteList.class);
 
-                    int requestCode = 1;
-                    startActivityForResult(intent, requestCode);
+                    db.open();
+
+                    //need to include one more parameter
+                    long id = db.insertRoute(titleSent, arrayStart_String, arrayEnd_String, arrayVia1_String);
+//                     if(id > 0){
+//                    Toast.makeText(MapActivity.this, "Add successful.", Toast.LENGTH_LONG).show();
+//                     }
+//                     else
+//                    Toast.makeText(MapActivity.this, "Add failed.", Toast.LENGTH_LONG).show();
+                    db.close();
 
                     startActivity(intent);
 
@@ -442,5 +459,19 @@ public class ViaActivity extends FragmentActivity {
             }
         });
         builder.show();
+    }
+
+    public static String strSeparator = "__,__";
+
+    public static String convertArrayToString(String[] array){
+        String str = "";
+        for (int i = 0;i<array.length; i++) {
+            str = str+array[i];
+            // Do not append comma at the end of last element
+            if(i<array.length-1){
+                str = str+strSeparator;
+            }
+        }
+        return str;
     }
 }

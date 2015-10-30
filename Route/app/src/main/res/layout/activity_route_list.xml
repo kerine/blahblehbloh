@@ -24,8 +24,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btnBack"
+        android:text="@string/btnBackToMain"
         android:id="@+id/button"
-        android:onClick="onClick_BacktoCallingActivity" />
+        android:onClick="onClick_BackToMain" />
 
 </LinearLayout>

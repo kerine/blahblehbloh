@@ -14,13 +14,15 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String columnName_routeName             = "routeName";
     public static final String columnName_routeStart            = "startLocation";
     public static final String columnName_routeEnd              = "endLocation";
+    public static final String columnName_routeVia1             = "via1_location";
+    public static final String columnName_routeVia2             = "via2_location";
 
     private static final String SQLite_CREATE =
             "CREATE TABLE " + tableName + "(" + columnName_routeID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + columnName_routeName + " TEXT NOT NULL," + columnName_routeStart + " TEXT NOT NULL," + columnName_routeEnd + " TEXT NOT NULL);";
+                    + columnName_routeName + " TEXT NOT NULL," + columnName_routeStart + " TEXT NOT NULL,"
+                    + columnName_routeEnd + " TEXT NOT NULL," + columnName_routeVia1 + " TEXT," + columnName_routeVia2 + " TEXT);";
 
     private static final String SQLite_DELETE = "DROP TABLE IF EXISTS " + tableName;
-
 
     public MyDBHelper(Context context) {
         super(context, databaseName, null, databaseVersion);
