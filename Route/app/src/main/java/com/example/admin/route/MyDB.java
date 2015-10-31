@@ -95,7 +95,9 @@ public class MyDB {
                         MyDBHelper.columnName_routeID,
                         MyDBHelper.columnName_routeName,
                         MyDBHelper.columnName_routeStart,
-                        MyDBHelper.columnName_routeEnd},
+                        MyDBHelper.columnName_routeEnd,
+                        MyDBHelper.columnName_routeVia1,
+                        MyDBHelper.columnName_routeVia2},
                MyDBHelper.columnName_routeID+"="+id,
                 null, null, null, null, null);
 
