@@ -61,5 +61,9 @@
     <string name="btnBack">Click to go back</string>
     <string name="show_Route">Submit to Database and Show Route</string>
     <string name="route_list">View Existing Routes</string>
+    <string name="title_activity_follow_route">FollowRouteActivity</string>
+    <string name="title_activity_notification">NotificationActivity</string>
+    <string name="title_activity_proximity">ProximityActivity</string>
+    <string name="btnBackToMain">Click to go Main Page</string>
 
 </resources>

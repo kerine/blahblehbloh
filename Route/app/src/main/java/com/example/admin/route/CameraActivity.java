@@ -235,34 +235,33 @@ public class CameraActivity extends Activity {
         }
     }
 
-//    public void goToMap(View view) {
-//        EditText title = (EditText) findViewById(R.id.title);
-//        String titleSent = title.getText().toString();
-//
-//        EditText notesStart = (EditText) findViewById(R.id.notePadStart);
-//        String notesStartSent = notesStart.getText().toString();
-//
-//        EditText notesEnd = (EditText) findViewById(R.id.notePadEnd);
-//        String notesEndSent = notesEnd.getText().toString();
-//
-//        Intent intent = new Intent(this, MapActivity.class);
-//
-//        Bundle bundle = new Bundle();
-//        bundle.putString("titleSent", titleSent);
-//        bundle.putString("notesStartSent", notesStartSent);
-//        bundle.putString("notesEndSent", notesEndSent);
-//
-//        bundle.putString("path", path);
-//        bundle.putString("pathEnd", pathEnd);
-//
-//        intent.putExtras(bundle);
-//
-//        int requestCode = 1;
-//        startActivityForResult(intent, requestCode);
-//
-//        startActivity(intent);
-//
-//    }
+    public void goToMap(View view) {
+        EditText title = (EditText) findViewById(R.id.title);
+        String titleSent = title.getText().toString();
+
+        EditText notesStart = (EditText) findViewById(R.id.notePadStart);
+        String notesStartSent = notesStart.getText().toString();
+
+        EditText notesEnd = (EditText) findViewById(R.id.notePadEnd);
+        String notesEndSent = notesEnd.getText().toString();
+
+        Intent intent = new Intent(this, MapActivity.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("titleSent", titleSent);
+        bundle.putString("notesStartSent", notesStartSent);
+        bundle.putString("notesEndSent", notesEndSent);
+
+        bundle.putString("path", path);
+        bundle.putString("pathEnd", pathEnd);
+
+        intent.putExtras(bundle);
+
+        int requestCode = 1;
+        startActivityForResult(intent, requestCode);
+
+        startActivity(intent);
+    }
 
     public void goToShowActivity(View view) {
 
@@ -274,7 +273,7 @@ public class CameraActivity extends Activity {
 
         EditText notesEnd = (EditText) findViewById(R.id.notePadEnd);
         String notesEndSent = notesEnd.getText().toString();
-        
+
         EditText text = (EditText) findViewById(R.id.notePad);
         String notes = text.getText().toString();
 
