@@ -24,6 +24,34 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/follow_Route"
+        android:id="@+id/followRoute"
+        android:onClick="onFollow" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/view_Route"
+        android:id="@+id/buttonToRoute"
+        android:onClick="onShow" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_record"
+        android:id="@+id/buttonDelete"
+        android:onClick="onDelete" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_all_records_btn"
+        android:id="@+id/btn_delete_all_records"
+        android:onClick="onClick_deleteAllRecords"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/btnBackToMain"
         android:id="@+id/button"
         android:onClick="onClick_BackToMain" />

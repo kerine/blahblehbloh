@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.admin.route" >
+    package="com.example.admin.route">
 
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -14,7 +14,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <permission android:name="com.mapv2.demo.permission.MAPS_RECEIVE"
+    <permission
+        android:name="com.mapv2.demo.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
     <uses-feature
@@ -26,10 +27,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,12 +39,10 @@
         </activity>
         <activity
             android:name=".CameraActivity"
-            android:label="@string/title_activity_camera" >
-        </activity>
+            android:label="@string/title_activity_camera"></activity>
         <activity
             android:name=".MapActivity"
-            android:label="@string/title_activity_map" >
-        </activity>
+            android:label="@string/title_activity_map"></activity>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
@@ -54,36 +53,29 @@
 
         <activity
             android:name=".DirectionsJSONParser"
-            android:label="@string/title_activity_directions_jsonparser" >
-        </activity>
+            android:label="@string/title_activity_directions_jsonparser"></activity>
         <activity
             android:name=".GeocodeJSONParser"
-            android:label="@string/title_activity_geocode_jsonparser" >
-        </activity>
+            android:label="@string/title_activity_geocode_jsonparser"></activity>
         <activity
             android:name=".ViaActivity"
-            android:label="@string/title_activity_via" >
-        </activity>
+            android:label="@string/title_activity_via"></activity>
         <activity
             android:name=".Via2Activity"
-            android:label="@string/title_activity_via2" >
-        </activity>
+            android:label="@string/title_activity_via2"></activity>
         <activity
             android:name=".CurrentLocationActivity"
-            android:label="@string/title_activity_current_location" >
-        </activity>
+            android:label="@string/title_activity_current_location"></activity>
         <activity
             android:name=".InfoActivity"
-            android:label="@string/title_activity_info" >
-        </activity>
+            android:label="@string/title_activity_info"></activity>
         <activity
             android:name=".DetailActivity"
-            android:label="@string/title_activity_detail" >
-        </activity>
+            android:label="@string/title_activity_detail"></activity>
         <activity
             android:name=".MyDB"
             android:label="@string/title_activity_my_db"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.admin.route.MainActivity" />
@@ -91,14 +83,14 @@
         <activity
             android:name=".RouteList"
             android:label="@string/title_activity_route_list"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.admin.route.MainActivity" />
         </activity>
         <activity
             android:name=".FollowRouteActivity"
-            android:label="@string/title_activity_follow_route" >
+            android:label="@string/title_activity_follow_route">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -106,20 +98,19 @@
         </activity>
         <activity
             android:name=".NotificationActivity"
-            android:label="@string/title_activity_notification" >
-            <intent-filter >
+            android:label="@string/title_activity_notification">
+            <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".ProximityActivity"
-            android:label="@string/title_activity_proximity" >
-            <intent-filter >
-                <action android:name="route.alert"/>
-            </intent-filter>
-        </receiver>
-
+        <activity
+            android:name=".ShowRouteActivity"
+            android:label="@string/title_activity_show_route"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.admin.route.MainActivity" />
+        </activity>
     </application>
-
 </manifest>

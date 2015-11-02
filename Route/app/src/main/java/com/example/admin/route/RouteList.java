@@ -3,24 +3,18 @@ package com.example.admin.route;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class RouteList extends Activity {
 
     MyDB db;
+    long itemID = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +74,9 @@ public class RouteList extends Activity {
         //set adapter for the list view
         ListView myList = (ListView) findViewById(R.id.routeList);
         myList.setAdapter(myCursorAdapter);
+
+        //this is important to stop managing cursor, or will cause Error when going back
+        stopManagingCursor(cursor);
         db.close();
     }
 
@@ -89,32 +86,61 @@ public class RouteList extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapter, View viewClicked,
                                     int position, long idInDB) {
+                viewClicked.setSelected(true);
 
-                // Getting the Container Layout of the ListView
-                LinearLayout linearLayoutParent = (LinearLayout) viewClicked;
+                itemID = idInDB;
 
-                // Getting Route Name
-                TextView routeName = (TextView) linearLayoutParent.getChildAt(0);
-                // Getting Route Name
-                TextView routeStart = (TextView) linearLayoutParent.getChildAt(1);
-                // Getting Route Name
-                TextView routeEnd = (TextView) linearLayoutParent.getChildAt(2);
-                // Getting Route Name
-                TextView routeVia1 = (TextView) linearLayoutParent.getChildAt(3);
-                // Getting Route Name
-                TextView routeVia2 = (TextView) linearLayoutParent.getChildAt(4);
-
-                Toast.makeText(getBaseContext(), routeName.getText().toString() + " " +
-                        routeStart.getText().toString() + " " + routeEnd.getText().toString() + " " + routeVia1.getText().toString() + " " + routeVia2.getText().toString()
-                        , Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void onClick_BackToMain(View view){
+    public void onFollow(View view){
+        if (itemID == -1) {
+            return;
+        }
+        else{
+            Intent myIntent = new Intent(this, FollowRouteActivity.class);
+            myIntent.putExtra("routeID",itemID);
+            startActivity(myIntent);
+        }
+    }
+    
+    public void onShow(View view){
+        if (itemID == -1) {
+            return;
+        }
+        else{
+            Intent myIntent = new Intent(this, ShowRouteActivity.class);
+            myIntent.putExtra("routeID",itemID);
+            startActivity(myIntent);
+        }
+    }
 
+    public void onDelete(View view){
+
+        db.open();
+        //if we haven't clicked a list item yet, do nothing
+        if (itemID == -1){
+            return;
+        }
+        else{
+            db.deleteRoute(itemID);
+            itemID = -1;
+        }
+        populateListViewFromDB();
+        db.close();
+    }
+
+    public void onClick_deleteAllRecords(View view) {
+
+        db.open();
+        db.deleteAllRoute();
+        populateListViewFromDB();
+        db.close();
+    }
+
+    public void onClick_BackToMain(View view){
         Intent myIntent = new Intent(this,MainActivity.class);
         startActivity(myIntent);
     }
-
 }

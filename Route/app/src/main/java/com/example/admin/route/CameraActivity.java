@@ -150,12 +150,19 @@ public class CameraActivity extends Activity {
 
                     viewImageStart.setImageBitmap(bitmap);
 
-                    path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    path = "/sdcard/DCIM/Camera/";
+
+                    Log.w("initial path" , path);
+
 
                     f.delete();
                     OutputStream outFile = null;
                     File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
                     path = path + String.valueOf(System.currentTimeMillis()) + ".jpg";
+
+                    Log.w("after path" , path);
+
+
                     try {
                         outFile = new FileOutputStream(file);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
@@ -199,7 +206,10 @@ public class CameraActivity extends Activity {
 
                     viewImageEnd.setImageBitmap(bitmap);
 
-                    pathEnd = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    //pathEnd = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+                    pathEnd = "/sdcard/DCIM/Camera/";
+
 
                     f.delete();
                     OutputStream outFile = null;
