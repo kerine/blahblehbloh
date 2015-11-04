@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -14,7 +15,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
     @Override
@@ -51,6 +51,11 @@ public class MainActivity extends Activity {
 
     public void goTo_RouteList(View view) {
         Intent myIntent = new Intent(this,RouteList.class);
+        startActivity(myIntent);
+    }
+
+    public void goTo_InstructionsActivity(View view) {
+        Intent myIntent = new Intent(this,InstructionsActivity.class);
         startActivity(myIntent);
     }
 }

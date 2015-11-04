@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+
 
 public class ShowRouteActivity extends Activity {
 
@@ -48,6 +50,7 @@ public class ShowRouteActivity extends Activity {
         stopManagingCursor(c);
         db.close();
 
+        //temporary extracted show informaton
         TextView routeName_View = (TextView)findViewById(R.id.TextView_routeName);
         routeName_View.setText(title);
 
@@ -63,16 +66,31 @@ public class ShowRouteActivity extends Activity {
         TextView via2Location_View = (TextView)findViewById(R.id.via2Location);
         via2Location_View.setText(via2Loc);
 
-//        //Show Picture
-//        File imgFile = new  File(photopath);
-//        if(imgFile.exists()){
-//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//            ImageView photo_View = (ImageView)findViewById(R.id.TextView_Image);
-//            photo_View.setImageBitmap(myBitmap);
-//        }
-//
-//        TextView note_View = (TextView)findViewById(R.id.TextView_note);
-//        note_View.setText(note);
+        String[] startArray = convertStringToArray(startLoc);
+
+        if (endLoc != null) {
+            String[] endArray = convertStringToArray(endLoc);
+        }
+        if (via1Loc != null) {
+            String[] via1Array = convertStringToArray(via1Loc);
+        }
+        if (via2Loc != null) {
+            String[] via2Array = convertStringToArray(via2Loc);
+        }
+
+        String photopath = startArray[1];
+        String note = startArray[0];
+
+        //Show Picture
+        File imgFile = new  File(photopath);
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            ImageView photo_View = (ImageView)findViewById(R.id.TextView_Image);
+            photo_View.setImageBitmap(myBitmap);
+        }
+
+        TextView note_View = (TextView)findViewById(R.id.TextView_note);
+        note_View.setText(note);
     }
 
     @Override
