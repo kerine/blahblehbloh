@@ -4,10 +4,13 @@ import android.app.PendingIntent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,22 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+//reference:
+//http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/
 
 public class FollowRouteActivity extends FragmentActivity {
 
@@ -31,6 +50,12 @@ public class FollowRouteActivity extends FragmentActivity {
     PendingIntent pendingIntent;
     double latStart, lngStart;
     Location location;
+
+    String url;
+    String str_via1 = null, str_via2 = null;
+    ArrayList<LatLng> markerPoints;
+
+    private ArrayList<LatLng> arrayPoints = null;
 
     private Circle mCircleStart, mCircleEnd, mCircleVia1, mCircleVia2;
     private Marker mMarker;
@@ -45,6 +70,9 @@ public class FollowRouteActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow_route);
+
+        // Initializing
+        markerPoints = new ArrayList<LatLng>();
 
         //Instantiate Database
         db = new MyDB(this);
@@ -73,13 +101,13 @@ public class FollowRouteActivity extends FragmentActivity {
         notesStart = startArray[0];
         pathStart = startArray[1];
         startLat = Double.valueOf(startArray[2]);
-        startLng =  Double.valueOf(startArray[3]);
+        startLng = Double.valueOf(startArray[3]);
 
         endArray = convertStringToArray(endLoc);
         notesEnd = endArray[0];
         pathEnd = endArray[1];
-        endLat =  Double.valueOf(endArray[2]);
-        endLng =  Double.valueOf(endArray[3]);
+        endLat = Double.valueOf(endArray[2]);
+        endLng = Double.valueOf(endArray[3]);
 
         if (via1Loc != null) {
             via1Array = convertStringToArray(via1Loc);
@@ -97,6 +125,8 @@ public class FollowRouteActivity extends FragmentActivity {
             via2Lng = Double.valueOf(via2Array[3]);
         }
 
+        arrayPoints = new ArrayList<LatLng>();
+
         // Getting reference to the SupportMapFragment of activity_main.xml
         SupportMapFragment fm = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         // Getting GoogleMap object from the fragment
@@ -106,6 +136,7 @@ public class FollowRouteActivity extends FragmentActivity {
         // Getting LocationManager object from System Service LOCATION_SERVICE
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
@@ -113,8 +144,7 @@ public class FollowRouteActivity extends FragmentActivity {
                 googleMap.clear();
 
                 try {
-
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(startLat, startLng), 15));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(startLat, startLng), 20));
 
                     MarkerOptions options = new MarkerOptions();
 
@@ -133,6 +163,14 @@ public class FollowRouteActivity extends FragmentActivity {
                     drawEndMarkerWithCircle(latLngEnd);
                     drawVia1MarkerWithCircle(latLngVia1);
                     drawVia2MarkerWithCircle(latLngVia2);
+
+                    // Getting URL to the Google Directions API
+                    String url = getDirectionsUrl(latLngStart, latLngEnd, latLngVia1, latLngVia2);
+
+                    DownloadTask downloadTask = new DownloadTask();
+
+                    // Start downloading json data from Google Directions API
+                    downloadTask.execute(url);
 
 
                     googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
@@ -153,11 +191,14 @@ public class FollowRouteActivity extends FragmentActivity {
                                 LayoutInflater inflater = getLayoutInflater();
                                 View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
 
-                                TextView text = (TextView)view.findViewById(R.id.textView);
+                                TextView text = (TextView) view.findViewById(R.id.textView);
                                 text.setText(notesStart);
 
+                                final BitmapFactory.Options options = new BitmapFactory.Options();
+                                options.inSampleSize = 8;
+
                                 ImageView image = (ImageView) view.findViewById(R.id.imageView);
-                                Bitmap thumbnail = (BitmapFactory.decodeFile(pathStart));
+                                Bitmap thumbnail = BitmapFactory.decodeFile(pathStart, options);
                                 image.setImageBitmap(thumbnail);
 
                                 Toast toast = new Toast(FollowRouteActivity.this);
@@ -168,7 +209,7 @@ public class FollowRouteActivity extends FragmentActivity {
                                 LayoutInflater inflater = getLayoutInflater();
                                 View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
 
-                                TextView text = (TextView)view.findViewById(R.id.textView);
+                                TextView text = (TextView) view.findViewById(R.id.textView);
                                 text.setText(notesEnd);
 
                                 ImageView image = (ImageView) view.findViewById(R.id.imageView);
@@ -183,7 +224,7 @@ public class FollowRouteActivity extends FragmentActivity {
                                 LayoutInflater inflater = getLayoutInflater();
                                 View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
 
-                                TextView text = (TextView)view.findViewById(R.id.textView);
+                                TextView text = (TextView) view.findViewById(R.id.textView);
                                 text.setText(notesVia1);
 
                                 ImageView image = (ImageView) view.findViewById(R.id.imageView);
@@ -198,7 +239,7 @@ public class FollowRouteActivity extends FragmentActivity {
                                 LayoutInflater inflater = getLayoutInflater();
                                 View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
 
-                                TextView text = (TextView)view.findViewById(R.id.textView);
+                                TextView text = (TextView) view.findViewById(R.id.textView);
                                 text.setText(notesVia2);
 
                                 ImageView image = (ImageView) view.findViewById(R.id.imageView);
@@ -210,7 +251,7 @@ public class FollowRouteActivity extends FragmentActivity {
                                 toast.setView(view);
                                 toast.show();
                             } else {
-                                Toast.makeText(getBaseContext(), "Outside all points" , Toast.LENGTH_LONG).show();
+                                Toast.makeText(getBaseContext(), "Outside all points", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -259,14 +300,190 @@ public class FollowRouteActivity extends FragmentActivity {
                 mMarker = googleMap.addMarker(markerOptions);
             }
 
-
-
         });
 
     }
 
-    public static String[] convertStringToArray(String str){
+    public static String[] convertStringToArray(String str) {
         String[] arr = str.split(strSeparator);
         return arr;
+    }
+
+    private String getDirectionsUrl(LatLng origin, LatLng dest, LatLng latLngVia1, LatLng latLngVia2) {
+
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        /*
+        if (latLngVia1 != null) {
+            str_via1 = "&waypoints=" + latLngVia1.latitude + "," + latLngVia1.longitude;
+        }
+
+        if (latLngVia2 != null) {
+            str_via2 = "|" + latLngVia2.latitude + "," + latLngVia2.longitude;
+        }
+
+        String key = "AIzaSyBeE19zDSNssSaPWfiVBRex2WYCqPl6LUM";
+        */
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor;
+
+        // Output format
+        String output = "json";
+
+        url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+        /*
+        if (str_via1 == null && str_via2 == null) {
+            // Building the url to the web service
+            url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        } else if (str_via2 == null) {
+            url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + str_via1 +"&key=" +key;
+        } else
+            url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters+ str_via1 + str_via2 +"&key=" + key;
+    */
+
+        return url;
+    }
+
+    /**
+     * A method to download json data from url
+     */
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+
+        } catch (Exception e) {
+            Log.d("Exception while downloading url", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    // Fetches data from url passed
+    private class DownloadTask extends AsyncTask<String, Void, String> {
+
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
+
+            // For storing data from web service
+            String data = "";
+
+            try {
+                // Fetching the data from web service
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        // Executes in UI thread, after the execution of
+        // doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+        }
+    }
+
+    /**
+     * A class to parse the Google Places in JSON format
+     */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                // Starts parsing data
+                routes = parser.parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        // Executes in UI thread, after the parsing process
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+            MarkerOptions markerOptions = new MarkerOptions();
+
+            // Traversing through all the routes
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points);
+                lineOptions.width(2);
+                lineOptions.color(Color.RED);
+            }
+
+            // Drawing polyline in the Google Map for the i-th route
+            googleMap.addPolyline(lineOptions);
+        }
     }
 }

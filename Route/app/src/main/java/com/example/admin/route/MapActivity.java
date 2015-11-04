@@ -278,7 +278,7 @@ public class MapActivity extends FragmentActivity {
 
                 // Locate the first location
                 if (i == 0) {
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 }
             }
@@ -376,7 +376,7 @@ public class MapActivity extends FragmentActivity {
 
                 // Locate the first location
                 if (i == 0)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             }
         }

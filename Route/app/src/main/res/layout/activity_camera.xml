@@ -3,7 +3,8 @@
     android:id="@+id/scrollView1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true" >
+    android:fillViewport="true"
+    android:background="@color/light_blue">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -18,12 +19,22 @@
             android:id="@+id/title"
             android:layout_gravity="center_horizontal|top"
             android:hint="@string/title"
+            android:background="@color/light_yellow"
             />
+
         <!-- Picture and Notes for Start Location -->
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/card_view1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+          >
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/dark_sea_green">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -34,15 +45,17 @@
 
             <ImageView
                 android:id="@+id/viewImageStart"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:src="@drawable/camera" />
+                android:src="@drawable/no_image" />
 
             <Button
                 android:id="@+id/btnSelectPhotoStart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select Photo" />
+                android:text="Select Photo"
+                android:background="@drawable/button"
+                style="@style/buttonStyle"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -51,15 +64,24 @@
                 android:layout_gravity="center_horizontal|top"
                 android:hint="@string/notes"
                 android:isScrollContainer="true"
+                android:background="@color/white"
                 />
 
         </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <!-- Picture and Notes for End Location -->
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/card_view2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/dark_sea_green">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -70,15 +92,18 @@
 
             <ImageView
                 android:id="@+id/viewImageEnd"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:src="@drawable/camera" />
+                android:src="@drawable/no_image" />
 
             <Button
                 android:id="@+id/btnSelectPhotoEnd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select Photo" />
+                android:text="Select Photo"
+                android:background="@drawable/button"
+                android:layout_gravity="center_vertical"
+                style="@style/buttonStyle"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -87,9 +112,10 @@
                 android:layout_gravity="center_horizontal|top"
                 android:hint="@string/notes"
                 android:isScrollContainer="true"
+                android:background="@color/white"
                 />
-
         </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <!-- Buttons  -->
         <LinearLayout
@@ -104,6 +130,7 @@
                 android:id="@+id/button4"
                 android:layout_gravity="center_horizontal"
                 android:onClick="goToMap"
+                android:background="@drawable/button2"
                 />
 
             <!--<Button-->
@@ -114,8 +141,8 @@
                 <!--android:layout_gravity="center_horizontal"-->
                 <!--android:onClick="goToShowActivity"-->
                 <!--/>-->
-
         </LinearLayout>
+
 
     </LinearLayout>
 </ScrollView>

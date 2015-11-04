@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Route</string>
+    <string name="app_name">Route Diary</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -7,6 +7,7 @@
     <string name="create_New">Create Advance Route</string>
     <string name="start_New">Start Route Now</string>
     <string name="follow_Old">Follow An Existing Route</string>
+    <string name="instructions">Instructions</string>
     <string name="title_activity_camera">CameraActivity</string>
 
     <string name="start_time">00:00:00</string>
@@ -69,5 +70,7 @@
     <string name="delete_record">Delete Record</string>
     <string name="title_activity_show_route">ShowRouteActivity</string>
     <string name="view_Route">See Route Details</string>
+    <string name="title_activity_instructions">InstructionsActivity</string>
     <string name="follow_Route">Follow Route</string>
+    <string name="title_activity_new_follow_route">NewFollowRouteActivity</string>
 </resources>
