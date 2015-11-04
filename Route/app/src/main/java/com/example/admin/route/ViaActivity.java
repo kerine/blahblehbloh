@@ -1,6 +1,5 @@
 package com.example.admin.route;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -313,7 +312,9 @@ public class ViaActivity extends FragmentActivity {
 
                     viewImageVia1.setImageBitmap(bitmap);
 
-                    pathVia1 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    //pathVia1 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    pathVia1 = "/sdcard/DCIM/Camera/";
+
 
                     f.delete();
                     OutputStream outFile = null;

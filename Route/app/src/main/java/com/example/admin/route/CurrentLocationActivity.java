@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,8 +27,12 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
     GoogleMap mMap;
     EditText startPlace, endPlace;
     double latStart, lngStart, latEnd, lngEnd;
-    String titleSent, notesStartSent, notesEndSent, path, pathEnd;
+    String titleSent, notesStartSent, notesEndSent, path, pathEnd, pathVia1, pathVia2, notesVia1, notesVia2;
     String id;
+
+    String currentPath, currentNotes;
+
+    Marker marker;
 
     int count = 0;
 
@@ -38,7 +43,6 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
 
         // Getting reference to the SupportMapFragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-
         // Getting reference to the Google Map
         mMap = mapFragment.getMap();
         // Enabling MyLocation Layer of Google Map
@@ -46,14 +50,34 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
         // Setting event handler for location change
         mMap.setOnMyLocationChangeListener(this);
 
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            id = extras.getString("id");
+        }
+        if (id == "m0") {
+            path = extras.getString("currentPath");
+            notesStartSent = extras.getString("currentNotes");
+            Toast.makeText(this, path + notesStartSent, Toast.LENGTH_LONG).show();
+        } else if (id == "m1") {
+            pathVia1 = extras.getString("currentPath");
+            notesVia1 = extras.getString("currentNotes");
+        } else if (id == "m2") {
+            pathVia2 = extras.getString("currentPath");
+            notesVia2 = extras.getString("currentNotes");
+        } else if (id == "m3") {
+            pathEnd = extras.getString("currentPath");
+            notesEndSent = extras.getString("currentNotes");
+        }
+
         // Setting a custom info window adapter for the google map
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
                 return null;
             }
-            // Defines the contents of the InfoWindow
 
+            // Defines the contents of the InfoWindow
             @Override
             public View getInfoContents(Marker marker) {
                 // Getting view from the layout file info_window_layout
@@ -69,7 +93,7 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
                 // Setting the longitude
                 tvLng.setText("Longitude:" + latLng.longitude);
                 id = marker.getId();
-
+                Toast.makeText(CurrentLocationActivity.this, id, Toast.LENGTH_LONG).show();
                 goTo_DetailActivity(v);
 
                 // Returning the view containing InfoWindow contents
@@ -90,7 +114,7 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
             @Override
             public void onClick(View v) {
                 if (count == 0) {
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(latStart, lngStart)).title(latStart + " : " + lngStart));
+                    marker = mMap.addMarker(new MarkerOptions().position(new LatLng(latStart, lngStart)).title(latStart + " : " + lngStart));
                     count++;
 //                    goTo_DetailActivity(v);
 
@@ -98,11 +122,12 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
                     marker.showInfoWindow();
 
                 }
-                if ( count > 0 && count < 3) {
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(latStart, lngStart)).title(latStart + " : " + lngStart).draggable(true));
+                else if ( count > 0 && count < 3) {
+                    // not yet implemented
+                    marker = mMap.addMarker(new MarkerOptions().position(new LatLng(latStart, lngStart)).title(latStart + " : " + lngStart).draggable(true));
                     count++;
                 } else {
-                    Toast.makeText(CurrentLocationActivity.this, "You have exceeded maximum number of points. Please proceed to add End Point.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CurrentLocationActivity.this, "You have exceeded maximum number of points. Please proceed to add End Point.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -110,6 +135,26 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
 
     public void goTo_DetailActivity(View view) {
         Intent myIntent = new Intent(this,DetailActivity.class);
+
+
+        Toast.makeText(this, "in goTo_DetailActivity" + id, Toast.LENGTH_LONG).show();
+        Log.w("kerine iddddd", id + "");
+
+        if (id == "m0") {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", "m0");
+            bundle.putString("notesStartSent", notesStartSent);
+            bundle.putString("path", path);
+            bundle.putDouble("latStart", latStart);
+            bundle.putDouble("latEnd",latEnd);
+            Toast.makeText(this, "enter loop" + path + notesStartSent + latStart + latEnd + id, Toast.LENGTH_LONG).show();
+        }
+         else if (id == "m1") {
+            Bundle bundle = new Bundle();
+            bundle.putString("notesVia1", notesVia1);
+            bundle.putString("pathVia1", pathVia1);
+        }
+
         startActivity(myIntent);
     }
 

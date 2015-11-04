@@ -20,6 +20,17 @@
         android:id="@+id/routeList"
         android:background="@color/dark_sea_green"/>
 
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:text="@string/follow_Route"
+        android:id="@+id/followRoute"
+        android:onClick="onFollow"
+        android:background="@drawable/button"
+        style="@style/buttonStyle"/>
+    
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
