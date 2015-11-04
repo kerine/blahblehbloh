@@ -318,7 +318,9 @@ public class Via2Activity extends FragmentActivity {
 
                     viewImageVia2.setImageBitmap(bitmap);
 
-                    pathVia2 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    //pathVia2 = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    pathVia2 = "/sdcard/DCIM/Camera/";
+
 
                     f.delete();
                     OutputStream outFile = null;

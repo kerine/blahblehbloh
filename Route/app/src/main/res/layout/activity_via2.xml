@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.admin.route.Via2Activity">
+    tools:context="com.example.admin.route.Via2Activity"
+    android:background="@color/dark_sea_green">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,21 +21,24 @@
             android:id="@+id/viewImageStart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/camera" />
+            android:src="@drawable/no_image" />
     </LinearLayout>
 
     <Button
         android:id="@+id/btnSelectPhotoVia2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Photo" />
+        android:text="Select Photo"
+        android:background="@drawable/button"
+        style="@style/buttonStyle"/>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:id="@+id/notePadVia2"
         android:layout_gravity="center_horizontal|top"
         android:hint="@string/notes"
+        android:background="@color/white"
         />
 
     <EditText
@@ -53,13 +57,17 @@
             android:id="@+id/btn_show_via2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/findVia" />
+            android:text="@string/findVia"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"/>
 
         <Button
             android:id="@+id/btn_goVia2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/next"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"
             />
 
     </LinearLayout>

@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.admin.route.MapActivity">
+    tools:context="com.example.admin.route.MapActivity"
+    android:background="@color/dark_sea_green">
 
     <EditText
         android:id="@+id/start_place"
@@ -30,14 +31,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:text="@string/find" />
+            android:text="@string/find"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"/>
 
         <Button
             android:id="@+id/btn_showEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/findEnd" />
+            android:text="@string/findEnd"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"/>
 
         <Button
             android:id="@+id/btn_goVia"
@@ -45,6 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:text="@string/next"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"
             />
 
     </LinearLayout>

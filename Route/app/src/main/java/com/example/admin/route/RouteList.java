@@ -3,18 +3,13 @@ package com.example.admin.route;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class RouteList extends Activity {
 
@@ -97,6 +92,17 @@ public class RouteList extends Activity {
 
             }
         });
+    }
+
+    public void onFollow(View view){
+        if (itemID == -1) {
+            return;
+        }
+        else{
+            Intent myIntent = new Intent(this, FollowRouteActivity.class);
+            myIntent.putExtra("routeID",itemID);
+            startActivity(myIntent);
+        }
     }
     
     public void onShow(View view){

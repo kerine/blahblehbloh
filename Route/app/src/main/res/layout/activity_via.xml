@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/dark_sea_green"
     tools:context="com.example.admin.route.ViaActivity">
 
     <LinearLayout
@@ -20,21 +21,24 @@
             android:id="@+id/viewImageStart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/camera" />
+            android:src="@drawable/no_image" />
     </LinearLayout>
 
         <Button
             android:id="@+id/btnSelectPhotoVia1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Photo" />
+            android:text="Select Photo"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"/>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:id="@+id/notePadVia1"
         android:layout_gravity="center_horizontal|top"
         android:hint="@string/notes"
+        android:background="@color/white"
         />
 
     <EditText
@@ -42,7 +46,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint2"
-        android:inputType="text" />
+        android:inputType="text"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,13 +58,17 @@
             android:id="@+id/btn_show_via1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/findVia" />
+            android:text="@string/findVia"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"/>
 
         <Button
             android:id="@+id/btn_goVia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/next"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"
             />
 
     </LinearLayout>

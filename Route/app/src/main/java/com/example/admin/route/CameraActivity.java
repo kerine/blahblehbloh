@@ -150,12 +150,19 @@ public class CameraActivity extends Activity {
 
                     viewImageStart.setImageBitmap(bitmap);
 
-                    path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    path = "/sdcard/DCIM/Camera/";
+
+                    Log.w("initial path" , path);
+
 
                     f.delete();
                     OutputStream outFile = null;
                     File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
                     path = path + String.valueOf(System.currentTimeMillis()) + ".jpg";
+
+                    Log.w("after path" , path);
+
+
                     try {
                         outFile = new FileOutputStream(file);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
@@ -199,7 +206,10 @@ public class CameraActivity extends Activity {
 
                     viewImageEnd.setImageBitmap(bitmap);
 
-                    pathEnd = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    //pathEnd = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+                    pathEnd = "/sdcard/DCIM/Camera/";
+
 
                     f.delete();
                     OutputStream outFile = null;
@@ -233,6 +243,10 @@ public class CameraActivity extends Activity {
                 viewImageEnd.setImageBitmap(thumbnail);
             }
         }
+        try{
+            galleryAddPic(pathEnd);
+
+        }catch (Exception e){};
     }
 
     public void goToMap(View view) {
@@ -263,32 +277,11 @@ public class CameraActivity extends Activity {
         startActivity(intent);
     }
 
-    public void goToShowActivity(View view) {
-
-        EditText routeName_Text = (EditText)findViewById(R.id.title);
-        title = routeName_Text.getText().toString();
-
-        EditText notesStart = (EditText) findViewById(R.id.notePadStart);
-        String notesStartSent = notesStart.getText().toString();
-
-        EditText notesEnd = (EditText) findViewById(R.id.notePadEnd);
-        String notesEndSent = notesEnd.getText().toString();
-
-        EditText text = (EditText) findViewById(R.id.notePad);
-        String notes = text.getText().toString();
-
-        Intent intent = new Intent(this, RouteList.class);
-
-        //Put into Database
-        db.open();
-        long id = db.insertRoute(title, notesStartSent, path);
-
-//        if(id > 0){
-//            Toast.makeText(this, "Add successful.", Toast.LENGTH_LONG).show();
-//        }
-//        else
-//            Toast.makeText(this, "Add failed.", Toast.LENGTH_LONG).show();
-        db.close();
-        startActivity(intent);
+    private void galleryAddPic(String mCurrentPhotoPath) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 }
