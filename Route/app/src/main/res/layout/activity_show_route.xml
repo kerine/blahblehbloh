@@ -5,6 +5,54 @@
     android:orientation="vertical"
     tools:context="com.example.admin.route.ShowRouteActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_show_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"/>
+
+        <Button
+            android:id="@+id/btn_show_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"/>
+
+        <Button
+            android:id="@+id/btn_show_via1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Via 1"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"/>
+
+        <Button
+            android:id="@+id/btn_show_via2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Via 2"
+            android:background="@drawable/button"
+            style="@style/buttonStyle"
+            />
+
+    </LinearLayout>
+
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        />
+
     <TextView
         android:layout_weight="1"
         android:layout_width="match_parent"

@@ -99,13 +99,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NotificationActivity"
-            android:label="@string/title_activity_notification" >
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ShowRouteActivity"
             android:label="@string/title_activity_show_route"
             android:parentActivityName=".MainActivity" >
@@ -120,10 +113,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.admin.route.MainActivity" />
-        </activity>
-        <activity
-            android:name=".NewFollowRouteActivity"
-            android:label="@string/title_activity_new_follow_route" >
         </activity>
     </application>
 

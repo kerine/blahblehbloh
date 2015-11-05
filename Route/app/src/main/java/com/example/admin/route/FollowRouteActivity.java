@@ -52,7 +52,7 @@ public class FollowRouteActivity extends FragmentActivity {
     Location location;
 
     String url;
-    String str_via1 = null, str_via2 = null;
+    String str_via1 = "", str_via2 = "";
     ArrayList<LatLng> markerPoints;
 
     private ArrayList<LatLng> arrayPoints = null;
@@ -136,43 +136,51 @@ public class FollowRouteActivity extends FragmentActivity {
         // Getting LocationManager object from System Service LOCATION_SERVICE
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(startLat, startLng), 15));
+
+        MarkerOptions options = new MarkerOptions();
+
+        // Setting the position of the marker
+        options.position(new LatLng(startLat, startLng));
+        options.position(new LatLng(endLat, endLng));
+        options.position(new LatLng(via1Lat, via1Lng));
+        options.position(new LatLng(via2Lat, via2Lng));
+
+        LatLng latLngStart = new LatLng(startLat, startLng);
+        LatLng latLngEnd = new LatLng(endLat, endLng);
+        LatLng latLngVia1 = new LatLng(via1Lat, via1Lng);
+        LatLng latLngVia2 = new LatLng(via2Lat, via2Lng);
+
+        drawStartMarkerWithCircle(latLngStart);
+        drawEndMarkerWithCircle(latLngEnd);
+        if (via1Loc != null) {
+            drawVia1MarkerWithCircle(latLngVia1);
+        }
+        if (via2Loc != null) {
+            drawVia2MarkerWithCircle(latLngVia2);
+        }
+
+        if ((via1Loc == null) && (via2Loc == null)) { //start and end only
+            // Getting URL to the Google Directions API
+            url = getDirectionsUrl2Point(latLngStart, latLngEnd);
+        } else if ((via1Loc != null) && (via2Loc == null)) { //start, end and via1
+            url = getDirectionsUrl3Point(latLngStart, latLngEnd, latLngVia1);
+        } else if ((via1Loc != null) && (via2Loc != null)) { //all 4 points
+            url = getDirectionsUrl4Point(latLngStart, latLngEnd, latLngVia1, latLngVia2);
+        }
+
+        DownloadTask downloadTask = new DownloadTask();
+
+        // Start downloading json data from Google Directions API
+        downloadTask.execute(url);
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng point) {
                 // Removes the existing marker from the Google Map
-                googleMap.clear();
+                //googleMap.clear();
 
                 try {
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(startLat, startLng), 20));
-
-                    MarkerOptions options = new MarkerOptions();
-
-                    // Setting the position of the marker
-                    options.position(new LatLng(startLat, startLng));
-                    options.position(new LatLng(endLat, endLng));
-                    options.position(new LatLng(via1Lat, via1Lng));
-                    options.position(new LatLng(via2Lat, via2Lng));
-
-                    LatLng latLngStart = new LatLng(startLat, startLng);
-                    LatLng latLngEnd = new LatLng(endLat, endLng);
-                    LatLng latLngVia1 = new LatLng(via1Lat, via1Lng);
-                    LatLng latLngVia2 = new LatLng(via2Lat, via2Lng);
-
-                    drawStartMarkerWithCircle(latLngStart);
-                    drawEndMarkerWithCircle(latLngEnd);
-                    drawVia1MarkerWithCircle(latLngVia1);
-                    drawVia2MarkerWithCircle(latLngVia2);
-
-                    // Getting URL to the Google Directions API
-                    String url = getDirectionsUrl(latLngStart, latLngEnd, latLngVia1, latLngVia2);
-
-                    DownloadTask downloadTask = new DownloadTask();
-
-                    // Start downloading json data from Google Directions API
-                    downloadTask.execute(url);
-
-
                     googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                         @Override
                         public void onMyLocationChange(Location location) {
@@ -185,7 +193,6 @@ public class FollowRouteActivity extends FragmentActivity {
                             Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleEnd.getCenter().latitude, mCircleEnd.getCenter().longitude, distanceEnd);
                             Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleVia1.getCenter().latitude, mCircleVia1.getCenter().longitude, distanceVia1);
                             Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleVia2.getCenter().latitude, mCircleVia2.getCenter().longitude, distanceVia2);
-
 
                             if (distanceStart[0] < mCircleStart.getRadius()) {
                                 LayoutInflater inflater = getLayoutInflater();
@@ -251,7 +258,6 @@ public class FollowRouteActivity extends FragmentActivity {
                                 toast.setView(view);
                                 toast.show();
                             } else {
-                                Toast.makeText(getBaseContext(), "Outside all points", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -259,49 +265,47 @@ public class FollowRouteActivity extends FragmentActivity {
                     e.printStackTrace();
                 }
             }
-
-            private void drawStartMarkerWithCircle(LatLng position) {
-                double radiusInMeters = 100.0;
-                int strokeColor = 0xffff0000; //red outline
-                int shadeColor = 0x44ff0000; //opaque red fill
-                CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                mCircleStart = googleMap.addCircle(circleOptions);
-                MarkerOptions markerOptions = new MarkerOptions().position(position);
-                mMarker = googleMap.addMarker(markerOptions);
-            }
-
-            private void drawEndMarkerWithCircle(LatLng position) {
-                double radiusInMeters = 100.0;
-                int strokeColor = 0xffff0000; //red outline
-                int shadeColor = 0x44ff0000; //opaque red fill
-                CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                mCircleEnd = googleMap.addCircle(circleOptions);
-                MarkerOptions markerOptions = new MarkerOptions().position(position);
-                mMarker = googleMap.addMarker(markerOptions);
-            }
-
-            private void drawVia1MarkerWithCircle(LatLng position) {
-                double radiusInMeters = 100.0;
-                int strokeColor = 0xffff0000; //red outline
-                int shadeColor = 0x44ff0000; //opaque red fill
-                CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                mCircleVia1 = googleMap.addCircle(circleOptions);
-                MarkerOptions markerOptions = new MarkerOptions().position(position);
-                mMarker = googleMap.addMarker(markerOptions);
-            }
-
-            private void drawVia2MarkerWithCircle(LatLng position) {
-                double radiusInMeters = 100.0;
-                int strokeColor = 0xffff0000; //red outline
-                int shadeColor = 0x44ff0000; //opaque red fill
-                CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
-                mCircleVia2 = googleMap.addCircle(circleOptions);
-                MarkerOptions markerOptions = new MarkerOptions().position(position);
-                mMarker = googleMap.addMarker(markerOptions);
-            }
-
         });
+    }
 
+    private void drawStartMarkerWithCircle(LatLng position) {
+        double radiusInMeters = 100.0;
+        int strokeColor = 0xffff0000; //red outline
+        int shadeColor = 0x44ff0000; //opaque red fill
+        CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+        mCircleStart = googleMap.addCircle(circleOptions);
+        MarkerOptions markerOptions = new MarkerOptions().position(position);
+        mMarker = googleMap.addMarker(markerOptions);
+    }
+
+    private void drawEndMarkerWithCircle(LatLng position) {
+        double radiusInMeters = 100.0;
+        int strokeColor = 0xffff0000; //red outline
+        int shadeColor = 0x44ff0000; //opaque red fill
+        CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+        mCircleEnd = googleMap.addCircle(circleOptions);
+        MarkerOptions markerOptions = new MarkerOptions().position(position);
+        mMarker = googleMap.addMarker(markerOptions);
+    }
+
+    private void drawVia1MarkerWithCircle(LatLng position) {
+        double radiusInMeters = 100.0;
+        int strokeColor = 0xffff0000; //red outline
+        int shadeColor = 0x44ff0000; //opaque red fill
+        CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+        mCircleVia1 = googleMap.addCircle(circleOptions);
+        MarkerOptions markerOptions = new MarkerOptions().position(position);
+        mMarker = googleMap.addMarker(markerOptions);
+    }
+
+    private void drawVia2MarkerWithCircle(LatLng position) {
+        double radiusInMeters = 100.0;
+        int strokeColor = 0xffff0000; //red outline
+        int shadeColor = 0x44ff0000; //opaque red fill
+        CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
+        mCircleVia2 = googleMap.addCircle(circleOptions);
+        MarkerOptions markerOptions = new MarkerOptions().position(position);
+        mMarker = googleMap.addMarker(markerOptions);
     }
 
     public static String[] convertStringToArray(String str) {
@@ -309,47 +313,57 @@ public class FollowRouteActivity extends FragmentActivity {
         return arr;
     }
 
-    private String getDirectionsUrl(LatLng origin, LatLng dest, LatLng latLngVia1, LatLng latLngVia2) {
-
+    private String getDirectionsUrl2Point(LatLng origin, LatLng dest) {
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-
         // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
-        /*
-        if (latLngVia1 != null) {
-            str_via1 = "&waypoints=" + latLngVia1.latitude + "," + latLngVia1.longitude;
-        }
+        // Sensor enabled
+        String sensor = "sensor=false";
+        // Building the parameters to the web service
+        String parameters = str_origin+"&"+str_dest+"&"+sensor;
+        // Output format
+        String output = "json";
+        url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        return url;
+    }
 
-        if (latLngVia2 != null) {
-            str_via2 = "|" + latLngVia2.latitude + "," + latLngVia2.longitude;
-        }
+    private String getDirectionsUrl3Point(LatLng origin, LatLng dest, LatLng latLngVia1) {
 
-        String key = "AIzaSyBeE19zDSNssSaPWfiVBRex2WYCqPl6LUM";
-        */
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        String str_via1 = latLngVia1.latitude + "," + latLngVia1.longitude;
 
         // Sensor enabled
         String sensor = "sensor=false";
-
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor;
-
+        String parameters = str_origin + "&" + str_dest +"&"+ sensor + "&waypoints=" + str_via1;
         // Output format
         String output = "json";
-
         url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        return url;
+    }
 
-        /*
-        if (str_via1 == null && str_via2 == null) {
-            // Building the url to the web service
-            url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-        } else if (str_via2 == null) {
-            url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + str_via1 +"&key=" +key;
-        } else
-            url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters+ str_via1 + str_via2 +"&key=" + key;
-    */
+    private String getDirectionsUrl4Point(LatLng origin, LatLng dest, LatLng latLngVia1, LatLng latLngVia2) {
 
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        str_via1 = latLngVia1.latitude + "," + latLngVia1.longitude + "|";
+        str_via2 = latLngVia2.latitude + "," + latLngVia2.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest +"&"+ sensor + "&waypoints=" + str_via1 + str_via2;
+        // Output format
+        String output = "json";
+        url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
         return url;
     }
 
@@ -478,7 +492,7 @@ public class FollowRouteActivity extends FragmentActivity {
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(2);
+                lineOptions.width(3);
                 lineOptions.color(Color.RED);
             }
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -135,10 +134,6 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
 
     public void goTo_DetailActivity(View view) {
         Intent myIntent = new Intent(this,DetailActivity.class);
-
-
-        Toast.makeText(this, "in goTo_DetailActivity" + id, Toast.LENGTH_LONG).show();
-        Log.w("kerine iddddd", id + "");
 
         if (id == "m0") {
             Bundle bundle = new Bundle();

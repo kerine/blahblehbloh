@@ -379,49 +379,13 @@ public class Via2Activity extends FragmentActivity {
     }
 
     private void ViaOrEnd() {
-        final CharSequence[] options = {"Add another Point", "Save", "Cancel"};
+        final CharSequence[] options = {"Save", "Cancel"};
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(Via2Activity.this);
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Add a Point")) {
-
-                    Intent intent = new Intent(Via2Activity.this, Via2Activity.class);
-
-                    EditText notesVia = (EditText) findViewById(R.id.notePadVia1);
-                    notesVia2 = notesVia.getText().toString();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("titleSent", titleSent);
-                    bundle.putString("notesStartSent", notesStartSent);
-                    bundle.putString("notesEndSent", notesEndSent);
-                    bundle.putString("notesVia1", notesVia1);
-                    bundle.putString("notesVia2", notesVia2);
-
-                    bundle.putString("path", path);
-                    bundle.putString("pathEnd", pathEnd);
-                    bundle.putString("pathVia1",pathVia1);
-                    bundle.putString("pathVia2",pathVia2);
-
-                    bundle.putDouble("latStart", latStart);
-                    bundle.putDouble("lngStart", lngStart);
-                    bundle.putDouble("latEnd", latEnd);
-                    bundle.putDouble("lngEnd", lngEnd);
-
-                    bundle.putDouble("latVia1", latVia1);
-                    bundle.putDouble("lngVia1", lngVia1);
-                    bundle.putDouble("latVia2", latVia2);
-                    bundle.putDouble("lngVia2", lngVia2);
-
-                    intent.putExtras(bundle);
-
-                    int requestCode = 1;
-                    startActivityForResult(intent, requestCode);
-
-                    startActivity(intent);
-
-                } else if (options[item].equals("Save")) {
+                if (options[item].equals("Save")) {
 
                     EditText notesVia = (EditText) findViewById(R.id.notePadVia2);
                     notesVia2 = notesVia.getText().toString();
