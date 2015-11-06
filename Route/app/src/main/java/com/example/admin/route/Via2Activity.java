@@ -301,6 +301,10 @@ public class Via2Activity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
                 File f = new File(Environment.getExternalStorageDirectory().toString());
@@ -320,7 +324,6 @@ public class Via2Activity extends FragmentActivity {
 
                     //pathVia2 = Environment.getExternalStorageDirectory().getAbsolutePath();
                     pathVia2 = "/sdcard/DCIM/Camera/";
-
 
                     f.delete();
                     OutputStream outFile = null;
@@ -349,7 +352,7 @@ public class Via2Activity extends FragmentActivity {
                 int columnIndex = c.getColumnIndex(filePath[0]);
                 pathVia2 = c.getString(columnIndex);
                 c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(pathVia2));
+                Bitmap thumbnail = (BitmapFactory.decodeFile(pathVia2, options));
                 Log.w("path of image", pathVia2 + "");
                 viewImageVia2.setImageBitmap(thumbnail);
             }

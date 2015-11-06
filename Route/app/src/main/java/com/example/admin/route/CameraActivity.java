@@ -133,6 +133,10 @@ public class CameraActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
                 File f = new File(Environment.getExternalStorageDirectory().toString());
@@ -152,16 +156,10 @@ public class CameraActivity extends Activity {
 
                     path = "/sdcard/DCIM/Camera/";
 
-                    Log.w("initial path" , path);
-
-
                     f.delete();
                     OutputStream outFile = null;
                     File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
                     path = path + String.valueOf(System.currentTimeMillis()) + ".jpg";
-
-                    Log.w("after path" , path);
-
 
                     try {
                         outFile = new FileOutputStream(file);
@@ -186,7 +184,7 @@ public class CameraActivity extends Activity {
                 int columnIndex = c.getColumnIndex(filePath[0]);
                 path = c.getString(columnIndex);
                 c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(path));
+                Bitmap thumbnail = (BitmapFactory.decodeFile(path, options));
                 Log.w("path of image", path + "");
                 viewImageStart.setImageBitmap(thumbnail);
             }
@@ -238,7 +236,7 @@ public class CameraActivity extends Activity {
                 int columnIndex = c.getColumnIndex(filePath[0]);
                 pathEnd = c.getString(columnIndex);
                 c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(pathEnd));
+                Bitmap thumbnail = (BitmapFactory.decodeFile(pathEnd, options));
                 Log.w("path of image", pathEnd + "");
                 viewImageEnd.setImageBitmap(thumbnail);
             }

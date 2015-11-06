@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -42,6 +43,7 @@ import java.util.List;
 
 //reference:
 //http://wptrafficanalyzer.in/blog/drawing-driving-route-directions-between-two-locations-using-google-directions-in-google-map-android-api-v2/
+//https://developers.google.com/maps/documentation/directions/intro#Waypoints
 
 public class FollowRouteActivity extends FragmentActivity {
 
@@ -51,6 +53,7 @@ public class FollowRouteActivity extends FragmentActivity {
     double latStart, lngStart;
     Location location;
 
+    Toast mToast;
     String url;
     String str_via1 = "", str_via2 = "";
     ArrayList<LatLng> markerPoints;
@@ -73,14 +76,9 @@ public class FollowRouteActivity extends FragmentActivity {
 
         // Initializing
         markerPoints = new ArrayList<LatLng>();
-
         //Instantiate Database
         db = new MyDB(this);
-
         long routeID = getIntent().getLongExtra("routeID", 0);
-
-        System.out.println("routeID is: " + routeID);
-
         db.open();
 
         Cursor c = db.getRoute(routeID);
@@ -89,13 +87,17 @@ public class FollowRouteActivity extends FragmentActivity {
 
         c.moveToPosition(0);
         String columnCount = String.valueOf(c.getColumnCount());
+        String title = c.getString(1);
         String startLoc = c.getString(2);
         String endLoc = c.getString(3);
-        String via1Loc = c.getString(4);
-        String via2Loc = c.getString(5);
+        final String via1Loc = c.getString(4);
+        final String via2Loc = c.getString(5);
 
         stopManagingCursor(c);
         db.close();
+
+        TextView textView = (TextView)findViewById(R.id.title);
+        textView.setText(title);
 
         startArray = convertStringToArray(startLoc);
         notesStart = startArray[0];
@@ -189,75 +191,107 @@ public class FollowRouteActivity extends FragmentActivity {
                             float[] distanceVia1 = new float[2];
                             float[] distanceVia2 = new float[2];
 
+                            CameraUpdate center=CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                            CameraUpdate zoom=CameraUpdateFactory.zoomTo(18);
+                            googleMap.moveCamera(center);
+                            googleMap.animateCamera(zoom);
+
                             Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleStart.getCenter().latitude, mCircleStart.getCenter().longitude, distanceStart);
                             Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleEnd.getCenter().latitude, mCircleEnd.getCenter().longitude, distanceEnd);
-                            Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleVia1.getCenter().latitude, mCircleVia1.getCenter().longitude, distanceVia1);
-                            Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleVia2.getCenter().latitude, mCircleVia2.getCenter().longitude, distanceVia2);
+                            if (via1Loc != null) {
+                                Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleVia1.getCenter().latitude, mCircleVia1.getCenter().longitude, distanceVia1);
+                            }
+                            if (via2Loc != null) {
+                                Location.distanceBetween(location.getLatitude(), location.getLongitude(), mCircleVia2.getCenter().latitude, mCircleVia2.getCenter().longitude, distanceVia2);
+                            }
+
+                            final BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inSampleSize = 8;
+
+                            LayoutInflater inflater = getLayoutInflater();
+                            View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
 
                             if (distanceStart[0] < mCircleStart.getRadius()) {
-                                LayoutInflater inflater = getLayoutInflater();
-                                View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
 
                                 TextView text = (TextView) view.findViewById(R.id.textView);
                                 text.setText(notesStart);
-
-                                final BitmapFactory.Options options = new BitmapFactory.Options();
-                                options.inSampleSize = 8;
 
                                 ImageView image = (ImageView) view.findViewById(R.id.imageView);
                                 Bitmap thumbnail = BitmapFactory.decodeFile(pathStart, options);
                                 image.setImageBitmap(thumbnail);
 
-                                Toast toast = new Toast(FollowRouteActivity.this);
-                                toast.setDuration(Toast.LENGTH_LONG);
-                                toast.setView(view);
-                                toast.show();
+                                if (mToast != null) { // Initialize toast if needed
+                                    mToast.cancel();
+                                }
+                                mToast = new Toast(FollowRouteActivity.this);
+                                mToast.setDuration(Toast.LENGTH_LONG);
+                                mToast.setView(view);
+                                mToast.show();
+
                             } else if (distanceEnd[0] < mCircleEnd.getRadius()) {
-                                LayoutInflater inflater = getLayoutInflater();
-                                View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
 
                                 TextView text = (TextView) view.findViewById(R.id.textView);
                                 text.setText(notesEnd);
 
                                 ImageView image = (ImageView) view.findViewById(R.id.imageView);
-                                Bitmap thumbnail = (BitmapFactory.decodeFile(pathEnd));
+                                Bitmap thumbnail = (BitmapFactory.decodeFile(pathEnd, options));
                                 image.setImageBitmap(thumbnail);
 
-                                Toast toast = new Toast(FollowRouteActivity.this);
-                                toast.setDuration(Toast.LENGTH_LONG);
-                                toast.setView(view);
-                                toast.show();
-                            } else if (distanceVia1[0] < mCircleVia1.getRadius()) {
-                                LayoutInflater inflater = getLayoutInflater();
-                                View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
+                                if (mToast != null) { // Initialize toast if needed
+                                    mToast.cancel();
+                                }
+                                mToast = new Toast(FollowRouteActivity.this);
+                                mToast.setDuration(Toast.LENGTH_LONG);
+                                mToast.setView(view);
+                                mToast.show();
+                            } else if (via1Loc != null && distanceVia1[0] < mCircleVia1.getRadius()) {
+                                //if (distanceVia1[0] < mCircleVia1.getRadius()) {
 
-                                TextView text = (TextView) view.findViewById(R.id.textView);
-                                text.setText(notesVia1);
+                                    Log.w("enter if loop", "via1");
 
-                                ImageView image = (ImageView) view.findViewById(R.id.imageView);
-                                Bitmap thumbnail = (BitmapFactory.decodeFile(pathVia1));
-                                image.setImageBitmap(thumbnail);
+                                    TextView text = (TextView) view.findViewById(R.id.textView);
+                                    text.setText(notesVia1);
 
-                                Toast toast = new Toast(FollowRouteActivity.this);
-                                toast.setDuration(Toast.LENGTH_LONG);
-                                toast.setView(view);
-                                toast.show();
-                            } else if (distanceVia2[0] < mCircleVia2.getRadius()) {
-                                LayoutInflater inflater = getLayoutInflater();
-                                View view = inflater.inflate(R.layout.customized_toast, (ViewGroup) findViewById(R.id.customizedToast));
+                                    ImageView image = (ImageView) view.findViewById(R.id.imageView);
+                                    Bitmap thumbnail = (BitmapFactory.decodeFile(pathVia1, options));
+                                    image.setImageBitmap(thumbnail);
 
-                                TextView text = (TextView) view.findViewById(R.id.textView);
-                                text.setText(notesVia2);
+                                    if (mToast != null) { // Initialize toast if needed
+                                        mToast.cancel();
+                                    }
+                                    mToast = new Toast(FollowRouteActivity.this);
+                                    mToast.setDuration(Toast.LENGTH_LONG);
+                                    mToast.setView(view);
+                                    mToast.show();
+                                //}
+                            } else if (via2Loc != null && distanceVia2[0] < mCircleVia2.getRadius()) {
+                                //if (distanceVia2[0] < mCircleVia2.getRadius()) {
 
-                                ImageView image = (ImageView) view.findViewById(R.id.imageView);
-                                Bitmap thumbnail = (BitmapFactory.decodeFile(pathVia2));
-                                image.setImageBitmap(thumbnail);
+                                    Log.w("enter if loop", "via2");
 
-                                Toast toast = new Toast(FollowRouteActivity.this);
-                                toast.setDuration(Toast.LENGTH_LONG);
-                                toast.setView(view);
-                                toast.show();
-                            } else {
+
+                                    TextView text = (TextView) view.findViewById(R.id.textView);
+                                    text.setText(notesVia2);
+
+                                    ImageView image = (ImageView) view.findViewById(R.id.imageView);
+                                    Bitmap thumbnail = (BitmapFactory.decodeFile(pathVia2, options));
+                                    image.setImageBitmap(thumbnail);
+
+                                    if (mToast != null) { // Initialize toast if needed
+                                        mToast.cancel();
+                                    }
+                                    mToast = new Toast(FollowRouteActivity.this);
+                                    mToast.setDuration(Toast.LENGTH_LONG);
+                                    mToast.setView(view);
+                                    mToast.show();
+                                //}
+                            }
+                            else {
+                                if (mToast != null) { // Initialize toast if needed
+                                    mToast.cancel();
+                                }
+                                mToast = Toast.makeText(FollowRouteActivity.this, "Out of all points", Toast.LENGTH_LONG);
+                                mToast.show(); // Show it, or just refresh the duration if it's already shown
                             }
                         }
                     });
@@ -269,7 +303,7 @@ public class FollowRouteActivity extends FragmentActivity {
     }
 
     private void drawStartMarkerWithCircle(LatLng position) {
-        double radiusInMeters = 100.0;
+        double radiusInMeters = 25.0;
         int strokeColor = 0xffff0000; //red outline
         int shadeColor = 0x44ff0000; //opaque red fill
         CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
@@ -279,7 +313,7 @@ public class FollowRouteActivity extends FragmentActivity {
     }
 
     private void drawEndMarkerWithCircle(LatLng position) {
-        double radiusInMeters = 100.0;
+        double radiusInMeters = 25.0;
         int strokeColor = 0xffff0000; //red outline
         int shadeColor = 0x44ff0000; //opaque red fill
         CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
@@ -289,7 +323,7 @@ public class FollowRouteActivity extends FragmentActivity {
     }
 
     private void drawVia1MarkerWithCircle(LatLng position) {
-        double radiusInMeters = 100.0;
+        double radiusInMeters = 25.0;
         int strokeColor = 0xffff0000; //red outline
         int shadeColor = 0x44ff0000; //opaque red fill
         CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
@@ -299,7 +333,7 @@ public class FollowRouteActivity extends FragmentActivity {
     }
 
     private void drawVia2MarkerWithCircle(LatLng position) {
-        double radiusInMeters = 100.0;
+        double radiusInMeters = 25.0;
         int strokeColor = 0xffff0000; //red outline
         int shadeColor = 0x44ff0000; //opaque red fill
         CircleOptions circleOptions = new CircleOptions().center(position).radius(radiusInMeters).fillColor(shadeColor).strokeColor(strokeColor).strokeWidth(8);
@@ -330,7 +364,6 @@ public class FollowRouteActivity extends FragmentActivity {
     }
 
     private String getDirectionsUrl3Point(LatLng origin, LatLng dest, LatLng latLngVia1) {
-
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
         // Destination of route
@@ -499,5 +532,9 @@ public class FollowRouteActivity extends FragmentActivity {
             // Drawing polyline in the Google Map for the i-th route
             googleMap.addPolyline(lineOptions);
         }
+    }
+
+    public void onClick_BacktoCallingActivity(View view){
+        finish();
     }
 }

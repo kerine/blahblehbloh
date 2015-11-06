@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:weightSum="10"
     tools:context="com.example.admin.route.ShowRouteActivity">
 
     <LinearLayout
@@ -10,37 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_show_start"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Start"
-            android:background="@drawable/button"
-            style="@style/buttonStyle"/>
-
-        <Button
-            android:id="@+id/btn_show_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="End"
-            android:background="@drawable/button"
-            style="@style/buttonStyle"/>
-
-        <Button
-            android:id="@+id/btn_show_via1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Via 1"
-            android:background="@drawable/button"
-            style="@style/buttonStyle"/>
-
-        <Button
-            android:id="@+id/btn_show_via2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Via 2"
-            android:background="@drawable/button"
-            style="@style/buttonStyle"
+            android:id="@+id/title"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:gravity="center"
             />
 
     </LinearLayout>
@@ -49,59 +26,23 @@
     <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"
         class="com.google.android.gms.maps.SupportMapFragment"
         />
 
-    <TextView
-        android:layout_weight="1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/TextView_routeName" />
+        android:orientation="horizontal"
+        android:layout_weight="1">
 
-    <ImageView
-        android:layout_weight="3"
-        android:id="@+id/TextView_Image"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:src="@drawable/camera"/>
-
-    <TextView
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/startLocation" />
-
-    <TextView
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/endLocation" />
-
-    <TextView
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/via1Location" />
-
-    <TextView
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/via2Location" />
-
-    <TextView
-        android:layout_weight="2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/TextView_note" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="@string/btnBack"
-        android:id="@+id/button"
-        android:onClick="onClick_BacktoCallingActivity" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/btnBack"
+            android:id="@+id/button"
+            android:onClick="onClick_BacktoCallingActivity" />
+    </LinearLayout>
 
 </LinearLayout>
