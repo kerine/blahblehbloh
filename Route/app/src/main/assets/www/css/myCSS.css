@@ -1,63 +1,9 @@
-.carouselbox {
-      font-family: helvetica,sans-serif;
-      font-size: 14px;
-      width: 100%;
-      height:100%;
-      position: relative;
-      margin: 1em;
-      border: 1px solid #ccc;
-      box-shadow: 2px 2px 10px #ccc;
-      overflow: hidden;
-    }
-    .content {
-      margin: 0;
-      padding: 0;
-    }
-    .content li {
-      font-size: 100px;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      list-style: none;
-      text-align: center;
-      z-index: 2;
-    }
-    .active {
-      height: 215px;
-    }
-    .carouselbox button {
-      border: none;
-      visibility: hidden;
-    }
-    .active button {
-      visibility: visible;
-    }
-    .offscreen {
-      position: absolute;
-      left: -2000px;
-    }
-    .active .buttons {
-      padding: 5px 0;
-      background: #eee;
-      text-align: center;
-      z-index: 10;
-      position: relative;
-    }
-    .active li {
-      position: absolute;
-      top: 20px;
-      opacity: 0;
-      transform: scale(0);
-      transition: 1s;
-    }
-    .active li.current {
-      top: 20px;
-      opacity: 1;
-      transform: scale(1);
-      transition: 1s;
-    }
-    .li img {
-      width: 200px;
-      height: 200px;
-      display: block;
-    }
+.bs-example, .new-caption-area {
+    width: 600px;
+    margin: auto;
+    color: #000;
+  }
+
+  .carousel-caption {
+	color: #000;
+}
