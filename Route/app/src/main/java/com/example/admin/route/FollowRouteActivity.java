@@ -433,7 +433,7 @@ public class FollowRouteActivity extends FragmentActivity {
             br.close();
 
         } catch (Exception e) {
-            Log.d("Exception while downloading url", e.toString());
+            Log.d("Unable to download Url", e.toString());
         } finally {
             iStream.close();
             urlConnection.disconnect();

@@ -200,16 +200,16 @@ public class ShowRouteActivity extends FragmentActivity {
                 // Getting the position from the marker
                 LatLng latLng = marker.getPosition();
                 // Getting reference to the TextView to set latitude
-                TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
-                // Getting reference to the TextView to set longitude
-                TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+//                TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+//                // Getting reference to the TextView to set longitude
+//                TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
 
                 TextView Notes = (TextView) v.findViewById(R.id.notes);
                 ImageView Image = (ImageView) v.findViewById(R.id.image);
                 // Setting the latitude
-                tvLat.setText("Latitude:" + latLng.latitude);
-                // Setting the longitude
-                tvLng.setText("Longitude:" + latLng.longitude);
+//                tvLat.setText("Latitude:" + latLng.latitude);
+//                // Setting the longitude
+//                tvLng.setText("Longitude:" + latLng.longitude);
 
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
@@ -351,7 +351,7 @@ public class ShowRouteActivity extends FragmentActivity {
             br.close();
 
         } catch (Exception e) {
-            Log.d("Exception while downloading url", e.toString());
+            Log.d("Unable to download url", e.toString());
         } finally {
             iStream.close();
             urlConnection.disconnect();

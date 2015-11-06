@@ -65,8 +65,8 @@ public class MapActivity extends FragmentActivity {
         path = extras.getString("path");
         pathEnd = extras.getString("pathEnd");
 
-        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
-                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
+//                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
 
         // Getting reference to the find button
         mBtnFind = (Button) findViewById(R.id.btn_show);
