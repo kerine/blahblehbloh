@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -91,6 +92,9 @@ public class ShowRouteActivity extends FragmentActivity {
         stopManagingCursor(c);
         db.close();
 
+        TextView textView = (TextView)findViewById(R.id.title);
+        textView.setText(title);
+
         startArray = convertStringToArray(startLoc);
         notesStart = startArray[0];
         pathStart = startArray[1];
@@ -138,8 +142,8 @@ public class ShowRouteActivity extends FragmentActivity {
 
         final LatLng latLngStart = new LatLng(startLat, startLng);
         final LatLng latLngEnd = new LatLng(endLat, endLng);
-            final LatLng latLngVia1 = new LatLng(via1Lat, via1Lng);
-            final LatLng latLngVia2 = new LatLng(via2Lat, via2Lng);
+        final LatLng latLngVia1 = new LatLng(via1Lat, via1Lng);
+        final LatLng latLngVia2 = new LatLng(via2Lat, via2Lng);
 
         drawStartMarker(latLngStart);
         drawEndMarker(latLngEnd);
@@ -224,76 +228,34 @@ public class ShowRouteActivity extends FragmentActivity {
                     Image.setImageBitmap(thumbnail);
                 } else if (latLng.equals(latLngVia2)) {
                     Notes.setText("Notes:" + notesVia2);
-                    Bitmap thumbnail = (BitmapFactory.decodeFile(pathVia2));
+                    Bitmap thumbnail = (BitmapFactory.decodeFile(pathVia2, options));
                     Image.setImageBitmap(thumbnail);
                 }
                 // Returning the view containing InfoWindow contents
                 return v;
             }
         });
-
-        //temporary extracted show informaton
-        /*
-        TextView routeName_View = (TextView)findViewById(R.id.TextView_routeName);
-        routeName_View.setText(title);
-
-        TextView startLocation_View = (TextView)findViewById(R.id.startLocation);
-        startLocation_View.setText(startLoc);
-
-        TextView endLocation_View = (TextView)findViewById(R.id.endLocation);
-        endLocation_View.setText(endLoc);
-
-        TextView via1Location_View = (TextView)findViewById(R.id.via1Location);
-        via1Location_View.setText(via1Loc);
-
-        TextView via2Location_View = (TextView)findViewById(R.id.via2Location);
-        via2Location_View.setText(via2Loc);
-
-        String[] startArray = convertStringToArray(startLoc);
-
-        if (endLoc != null) {
-            String[] endArray = convertStringToArray(endLoc);
-        }
-        if (via1Loc != null) {
-            String[] via1Array = convertStringToArray(via1Loc);
-        }
-        if (via2Loc != null) {
-            String[] via2Array = convertStringToArray(via2Loc);
-        }
-
-        String photopath = startArray[1];
-        String note = startArray[0];
-
-        //Show Picture
-        File imgFile = new  File(photopath);
-        if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            ImageView photo_View = (ImageView)findViewById(R.id.TextView_Image);
-            photo_View.setImageBitmap(myBitmap);
-        }
-
-        TextView note_View = (TextView)findViewById(R.id.TextView_note);
-        note_View.setText(note);
-        */
     }
 
+    //references:
+    //http://stackoverflow.com/questions/19076124/android-map-marker-color
     private void drawStartMarker(LatLng position) {
-        MarkerOptions markerOptions = new MarkerOptions().position(position);
+        MarkerOptions markerOptions = new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mMarker = googleMap.addMarker(markerOptions);
     }
 
     private void drawEndMarker(LatLng position) {
-        MarkerOptions markerOptions = new MarkerOptions().position(position);
+        MarkerOptions markerOptions = new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
         mMarker = googleMap.addMarker(markerOptions);
     }
 
     private void drawVia1Marker(LatLng position) {
-        MarkerOptions markerOptions = new MarkerOptions().position(position);
+        MarkerOptions markerOptions = new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         mMarker = googleMap.addMarker(markerOptions);
     }
 
     private void drawVia2Marker(LatLng position) {
-        MarkerOptions markerOptions = new MarkerOptions().position(position);
+        MarkerOptions markerOptions = new MarkerOptions().position(position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         mMarker = googleMap.addMarker(markerOptions);
     }
 
@@ -457,7 +419,7 @@ public class ShowRouteActivity extends FragmentActivity {
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points = null;
-            PolylineOptions lineOptions = null;
+            PolylineOptions lineOptions = new PolylineOptions();
             MarkerOptions markerOptions = new MarkerOptions();
 
             // Traversing through all the routes
