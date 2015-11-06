@@ -78,11 +78,11 @@ public class ViaActivity extends FragmentActivity {
         latEnd = extras.getDouble("latEnd");
         lngEnd = extras.getDouble("lngEnd");
 
-        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
-                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
-
-        Toast.makeText(this, "START LATLNG:" + String.format("%.6f", latStart) + String.format("%.6f", lngStart),Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "END LATLNG:" + String.format("%.6f", latEnd) + String.format("%.6f", lngEnd), Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
+//                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
+//
+//        Toast.makeText(this, "START LATLNG:" + String.format("%.6f", latStart) + String.format("%.6f", lngStart),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "END LATLNG:" + String.format("%.6f", latEnd) + String.format("%.6f", lngEnd), Toast.LENGTH_LONG).show();
 
 
         b = (Button) findViewById(R.id.btnSelectPhotoVia1);

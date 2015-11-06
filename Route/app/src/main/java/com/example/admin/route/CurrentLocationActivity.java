@@ -84,13 +84,13 @@ public class CurrentLocationActivity extends FragmentActivity implements GoogleM
                 // Getting the position from the marker
                 LatLng latLng = marker.getPosition();
                 // Getting reference to the TextView to set latitude
-                TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
-                // Getting reference to the TextView to set longitude
-                TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
-                // Setting the latitude
-                tvLat.setText("Latitude:" + latLng.latitude);
-                // Setting the longitude
-                tvLng.setText("Longitude:" + latLng.longitude);
+//                TextView tvLat = (TextView) v.findViewById(R.id.tv_lat);
+//                // Getting reference to the TextView to set longitude
+//                TextView tvLng = (TextView) v.findViewById(R.id.tv_lng);
+//                // Setting the latitude
+//                tvLat.setText("Latitude:" + latLng.latitude);
+//                // Setting the longitude
+//                tvLng.setText("Longitude:" + latLng.longitude);
                 id = marker.getId();
                 Toast.makeText(CurrentLocationActivity.this, id, Toast.LENGTH_LONG).show();
                 goTo_DetailActivity(v);

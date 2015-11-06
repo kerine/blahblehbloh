@@ -83,12 +83,12 @@ public class Via2Activity extends FragmentActivity {
         latVia1 = extras.getDouble("latVia1");
         lngVia1 = extras.getDouble("lngVia1");
 
-        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
-                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
-
-        Toast.makeText(this, "START LATLNG:" + String.format("%.6f", latStart) + String.format("%.6f", lngStart),Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, "END LATLNG:" + String.format("%.6f", latEnd) + String.format("%.6f", lngEnd), Toast.LENGTH_LONG).show();
-        Toast.makeText(this, "VIA_POINT_1 LATLNG:" + String.format("%.6f", latVia1) + String.format("%.6f", lngVia1), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "route title: " + titleSent + ", startPath : "+  path + ", startNotes :" + notesStartSent
+//                + ", endPath: " + pathEnd + ", endNotes: " + notesEndSent, Toast.LENGTH_LONG).show();
+//
+//        Toast.makeText(this, "START LATLNG:" + String.format("%.6f", latStart) + String.format("%.6f", lngStart),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "END LATLNG:" + String.format("%.6f", latEnd) + String.format("%.6f", lngEnd), Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "VIA_POINT_1 LATLNG:" + String.format("%.6f", latVia1) + String.format("%.6f", lngVia1), Toast.LENGTH_SHORT).show();
 
 
         b = (Button) findViewById(R.id.btnSelectPhotoVia2);
