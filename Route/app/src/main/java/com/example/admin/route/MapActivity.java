@@ -153,6 +153,17 @@ public class MapActivity extends FragmentActivity {
         buttonVia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(String.format("%.6f", latStart).equals("0.000000") && String.format("%.6f", lngStart).equals("0.000000")){
+                    Toast.makeText(MapActivity.this, "Please enter the start location and find start marker", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(String.format("%.6f", latEnd).equals("0.000000") && String.format("%.6f", lngEnd).equals("0.000000")) {
+                    Toast.makeText(MapActivity.this, "Please enter the end location and find end marker", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 ViaOrEnd();
             }
         });
@@ -413,6 +424,7 @@ public class MapActivity extends FragmentActivity {
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
+
                 if (options[item].equals("Add a Point")) {
 
                     Intent intent = new Intent(MapActivity.this, ViaActivity.class);
