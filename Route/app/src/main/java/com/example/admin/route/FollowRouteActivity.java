@@ -290,8 +290,8 @@ public class FollowRouteActivity extends FragmentActivity {
                                 if (mToast != null) { // Initialize toast if needed
                                     mToast.cancel();
                                 }
-                                mToast = Toast.makeText(FollowRouteActivity.this, "Out of all points", Toast.LENGTH_LONG);
-                                mToast.show(); // Show it, or just refresh the duration if it's already shown
+                                //mToast = Toast.makeText(FollowRouteActivity.this, "Out of all points", Toast.LENGTH_LONG);
+                                //mToast.show(); // Show it, or just refresh the duration if it's already shown
                             }
                         }
                     });
