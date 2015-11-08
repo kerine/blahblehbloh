@@ -448,7 +448,10 @@ public class ShowRouteActivity extends FragmentActivity {
             }
 
             // Drawing polyline in the Google Map for the i-th route
-            googleMap.addPolyline(lineOptions);
+            try {
+                googleMap.addPolyline(lineOptions);
+            }catch (Exception e)
+            {}
         }
     }
 
