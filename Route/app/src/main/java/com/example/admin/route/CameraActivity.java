@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -248,8 +249,14 @@ public class CameraActivity extends Activity {
     }
 
     public void goToMap(View view) {
+
         EditText title = (EditText) findViewById(R.id.title);
         String titleSent = title.getText().toString();
+
+        if (titleSent.matches("")) {
+            Toast.makeText(this, "Please enter a route title.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         EditText notesStart = (EditText) findViewById(R.id.notePadStart);
         String notesStartSent = notesStart.getText().toString();

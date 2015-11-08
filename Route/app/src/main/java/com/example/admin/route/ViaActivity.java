@@ -136,6 +136,12 @@ public class ViaActivity extends FragmentActivity {
         buttonVia2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(String.format("%.6f", latVia1).equals("0.000000") && String.format("%.6f", lngVia1).equals("0.000000")){
+                    Toast.makeText(ViaActivity.this, "Please enter the start location and find start marker", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 ViaOrEnd();
             }
         });
