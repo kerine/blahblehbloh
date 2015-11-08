@@ -1,6 +1,8 @@
 package com.example.admin.route;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -133,10 +135,24 @@ public class RouteList extends Activity {
 
     public void onClick_deleteAllRecords(View view) {
 
-        db.open();
-        db.deleteAllRoute();
-        populateListViewFromDB();
-        db.close();
+        new AlertDialog.Builder(this)
+                .setTitle("Deleting All Routes")
+                .setMessage("Are you sure you want to delete all routes?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        db.open();
+                        db.deleteAllRoute();
+                        populateListViewFromDB();
+                        db.close();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void onClick_BackToMain(View view){
