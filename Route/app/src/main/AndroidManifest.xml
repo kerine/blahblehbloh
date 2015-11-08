@@ -31,7 +31,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,10 +41,12 @@
         </activity>
         <activity
             android:name=".CameraActivity"
-            android:label="@string/title_activity_camera" />
+            android:label="@string/title_activity_camera"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MapActivity"
-            android:label="@string/title_activity_map" />
+            android:label="@string/title_activity_map"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
@@ -60,10 +63,12 @@
             android:label="@string/title_activity_geocode_jsonparser" />
         <activity
             android:name=".ViaActivity"
-            android:label="@string/title_activity_via" />
+            android:label="@string/title_activity_via"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Via2Activity"
-            android:label="@string/title_activity_via2" />
+            android:label="@string/title_activity_via2"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CurrentLocationActivity"
             android:label="@string/title_activity_current_location" />
@@ -84,24 +89,26 @@
         <activity
             android:name=".RouteList"
             android:label="@string/title_activity_route_list"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.admin.route.MainActivity" />
         </activity>
         <activity
             android:name=".FollowRouteActivity"
-            android:label="@string/title_activity_follow_route" >
+            android:label="@string/title_activity_follow_route"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ShowRouteActivity"
             android:label="@string/title_activity_show_route"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.admin.route.MainActivity" />
@@ -109,11 +116,21 @@
         <activity
             android:name=".InstructionsActivity"
             android:label="@string/title_activity_instructions"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.admin.route.MainActivity" />
         </activity>
+
+        <receiver android:name=".BatteryLevelReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_BATTERY_LOW"/>
+                <action android:name="android.intent.action.ACTION_BATTERY_OKAY"/>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

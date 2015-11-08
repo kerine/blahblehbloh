@@ -135,7 +135,7 @@ public class CameraActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 8;
+        options.inSampleSize = 16;
 
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {

@@ -57,7 +57,7 @@
 
     <string name="textView_database_content">Database Content</string>
     <string name="add_record_btn">Add Record</string>
-    <string name="delete_all_records_btn">Delete All Records</string>
+    <string name="delete_all_records_btn">Delete All Routes</string>
     <string name="go_to_routeList">View Routes</string>
     <string name="btnBack">Click to go back</string>
     <string name="show_Route">Submit to Database and Show Route</string>
@@ -67,7 +67,7 @@
     <string name="title_activity_proximity">ProximityActivity</string>
     <string name="btnBackToMain">Click to go Main Page</string>
 
-    <string name="delete_record">Delete Record</string>
+    <string name="delete_record">Delete Route</string>
     <string name="title_activity_show_route">ShowRouteActivity</string>
     <string name="view_Route">See Route Details</string>
     <string name="title_activity_instructions">InstructionsActivity</string>

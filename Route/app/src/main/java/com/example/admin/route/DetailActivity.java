@@ -51,7 +51,7 @@ public class DetailActivity extends Activity {
             currentNotes = extras.getString("notesStartSent");
             latStart = extras.getDouble("latStart");
             latEnd = extras.getDouble("latEnd");
-            Toast.makeText(this, "Detail activity = " + currentPath + currentNotes + latStart + latEnd + id, Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "Detail activity = " + currentPath + currentNotes + latStart + latEnd + id, Toast.LENGTH_LONG).show();
 
         }
 
